@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+     <record id="group_resp_site" model="res.groups">
+        <field name="name">Résponsable site</field>  
+    </record>
+ 
+	<record model="mail.channel" id="channel_stock_purchase_group">
+		    <field name="name">Stock</field>
+		    <field name="group_ids" eval="[(4, ref('stock.group_stock_user')),(4, ref('purchase.group_purchase_user'))]"/>
+		    <field name="description">Message Notifications.</field>
+		</record>
+		</data>
+	</odoo>

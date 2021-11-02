@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_template_form_qty_inherit" model="ir.ui.view">
+        <field name="name">product.template.product.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="after">
+                  <field name="seuil_alerte" />
+                  <field name="dateAlerte" invisible="1"/>
+                  <field name="isAlerte" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+     <record id="product_template_tree_qty_inherit" model="ir.ui.view">
+        <field name="name">product.template.product.tree</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+        <xpath expr="//field[@name='activity_exception_decoration']" position="before">
+            <field name="state_qty" widget="badge" decoration-danger="state_qty == 'reapprovisionner'"  groups='tit_pos_management.group_resp_site'>
+            </field>
+        </xpath>
+        </field>
+    </record>
+
+</odoo>

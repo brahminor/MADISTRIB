@@ -52,8 +52,8 @@ const PosComponent = require('point_of_sale.PosComponent');
         }
 
         reload_cmd_en_attente(){
+            //cette fct permet l'actualisation de la page de cmd en attente
             
-                        /// tester  actualisation de la page de cmd en attente////
                         var self = this; 
                         rpc.query({
                             model: 'pos.cmd_vendeur',
@@ -73,11 +73,14 @@ const PosComponent = require('point_of_sale.PosComponent');
                         /// tester  actualisation de la page de cmd en attente////
         }   
         selectOrder(com, id){
+            //cette fonction permet de faire le chargement de la cmd
             let or = this.env.pos.get_order()
             this.load_commande(com, id);
         }
 
         load_commande (commande_id, id) {
+            //cette fonction permet d'actualiser la page de saisie de la cmd
+
             var order = this.env.pos.add_new_order();
             //récupérer la commande selectinnée
             var commande = this.get_commande_by_id(id)
@@ -85,6 +88,7 @@ const PosComponent = require('point_of_sale.PosComponent');
             order.set_client(this.env.pos.db.get_partner_by_id(commande.partner_id[0]));
             // récupérer les order line de la commande selectionnée
             order.commande_id = id;
+            order.commande_id_acompte = 0;
             var commande_line = this.get_commande_lines(commande.id)
             for (var i=0; i<commande_line.length;i++) {
                 var product = this.env.pos.db.get_product_by_id(commande_line[i].product_id[0])
@@ -102,9 +106,8 @@ const PosComponent = require('point_of_sale.PosComponent');
             redirection vers la page de saisie de cmd mais vide sans ajout d'une nvlle 
             cmd dans menu cmd du natif du pos
             */
-            var v = this.env.pos.add_new_order();
-            this.env.pos.delete_current_order();
-            this.env.pos.set_order(v);  
+            this.showScreen('ProductScreen');
+              
         }
         get_commande_by_id (id) {
             /*
@@ -143,7 +146,7 @@ const PosComponent = require('point_of_sale.PosComponent');
             */
             var l = this;
             const { confirmed } = await this.showPopup('ValidationCommandePopup', {
-                            title : this.env._t("Annuler acompte"),
+                            title : this.env._t("Annuler commande"),
                             body : this.env._t('Voulez-vous vraiment annuler la commande ? '),
                             confirmText: this.env._t("Oui"),
                             cancelText: this.env._t("Non"),

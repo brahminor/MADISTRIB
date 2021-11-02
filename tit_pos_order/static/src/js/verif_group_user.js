@@ -23,6 +23,7 @@ odoo.define('tit_pos_order.verif_group_user', function (require) {
                         contents.find(".ctrl_btnValiderCmd").show();//valider la commande
                         contents.find(".set-customer").show();//choisir client
                         contents.find(".pay").hide();//paiement
+                        contents.find(".next").hide();//nouvelle commande après le paiement
                         $('.ticket-button').show(); // menu commandes du natif
                         $('.ticket_cmd_attente').hide();//cmd en attente
                         $('.ticket_cmd_vendeur').hide();//cmd validées par le vendeur
@@ -39,6 +40,7 @@ odoo.define('tit_pos_order.verif_group_user', function (require) {
                         contents.find(".ctrl_btnValiderCmd").hide();//valider la commande
                         contents.find(".set-customer").show();//choisir client
                         contents.find(".pay").show();//paiement
+                        contents.find(".next").hide();//nouvelle commande après le paiement
                         $('.ticket-button').hide(); // menu commandes du natif
                         $('.ticket_cmd_attente').show();//cmd en attente
                         $('.ticket_cmd_vendeur').show();//cmd validées par le vendeur
@@ -53,6 +55,7 @@ odoo.define('tit_pos_order.verif_group_user', function (require) {
                         contents.find(".ctrl_btnValiderCmd").hide();//valider la commande
                         contents.find(".set-customer").show();//choisir client
                         contents.find(".pay").show();//paiement
+                        contents.find(".next").hide();//nouvelle commande après le paiement
                         $('.ticket-button').hide(); // menu commandes du natif
                         $('.ticket_cmd_attente').show();//cmd en attente
                         $('.ticket_cmd_vendeur').show();//cmd validées par le vendeur
@@ -67,6 +70,7 @@ odoo.define('tit_pos_order.verif_group_user', function (require) {
                         contents.find(".ctrl_btnValiderCmd").hide();//valider la commande
                         contents.find(".set-customer").hide();//choisir client
                         contents.find(".pay").show();//paiement
+                        contents.find(".next").hide();//nouvelle commande après le paiement
                         $('.ticket-button').hide(); // menu commandes du natif
                         $('.ticket_cmd_attente').show();//cmd en attente
                         $('.ticket_cmd_vendeur').hide();//cmd validées par le vendeur 
@@ -81,6 +85,8 @@ odoo.define('tit_pos_order.verif_group_user', function (require) {
                         contents.find(".ctrl_btnValiderCmd").hide();//valider la commande
                         contents.find(".set-customer").show();//choisir client
                         contents.find(".pay").show();//paiement
+                        contents.find(".next").hide();//nouvelle commande après le paiement
+
                         $('.ticket-button').hide(); // menu commandes du natif
                         $('.ticket_cmd_attente').show();//cmd en attente
                         $('.ticket_cmd_vendeur').show();//cmd validées par le vendeur
@@ -95,6 +101,7 @@ odoo.define('tit_pos_order.verif_group_user', function (require) {
                         contents.find(".ctrl_btnValiderCmd").show();//valider la commande
                         contents.find(".set-customer").show();//choisir client
                         contents.find(".pay").show();//paiement
+                        contents.find(".next").show();//nouvelle commande après le paiement
                         $('.ticket-button').show(); // menu commandes du natif
                         $('.ticket_cmd_attente').show();//cmd en attente
                         $('.ticket_cmd_valide').show();//cmd validées
@@ -111,6 +118,7 @@ odoo.define('tit_pos_order.verif_group_user', function (require) {
                         contents.find(".ctrl_btnValiderCmd").hide();//valider la commande
                         contents.find(".set-customer").show();//choisir client
                         contents.find(".pay").show();//paiement
+                        contents.find(".next").show();//nouvelle commande après le paiement
                         $('.ticket-button').show(); // menu commandes du natif
                         $('.ticket_cmd_attente').hide();//cmd en attente
                         $('.ticket_cmd_valide').hide();//cmd validées

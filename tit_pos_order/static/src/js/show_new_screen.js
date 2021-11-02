@@ -58,6 +58,14 @@ odoo.define('tit_pos_order.RewardButton2', function(require) {
                     });
             }
             else{
+
+                if (order.orderlines.models.length <= 0){
+                    return this.showPopup('ErrorPopup', {
+                      title:('Produit monquant'),
+                      body:('Veuillez définir au  moins un produits.v.p ! ')
+                    });
+                }
+                else{
                 try {
                     let fields = {}
                     fields['id'] = order.attributes.client.id
@@ -129,6 +137,11 @@ odoo.define('tit_pos_order.RewardButton2', function(require) {
                                     interface de commande et le tous soit à 0)
                                     */
                                     this.env.pos.delete_current_order();
+                                    if (this.props.isTicketScreenShown) {
+                                        posbus.trigger('ticket-button-clicked');
+                                    } else {
+                                        this.showScreen('TicketScreen');
+                                    }
                                // fin de partie d'ajout de cmd validée par vendeur 
                         }        
                     }
@@ -184,6 +197,11 @@ odoo.define('tit_pos_order.RewardButton2', function(require) {
                                     interface de commande et le tous soit à 0)
                                     */ 
                                     this.env.pos.delete_current_order();
+                                    if (this.props.isTicketScreenShown) {
+                                        posbus.trigger('ticket-button-clicked');
+                                    } else {
+                                        this.showScreen('TicketScreen');
+                                    }
                                // fin de partie d'ajout de cmd validée par vendeur
                         }
 
@@ -196,7 +214,7 @@ odoo.define('tit_pos_order.RewardButton2', function(require) {
                     } else {
                         throw error;
                     }
-                }
+                }}
             }
            //----------------------------------------
            
