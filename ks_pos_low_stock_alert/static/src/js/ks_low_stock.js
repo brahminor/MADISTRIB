@@ -11,7 +11,7 @@ odoo.define('ks_pos_low_stock_alert.ks_low_stock', function (require) {
     const ks_utils = require('ks_pos_low_stock_alert.utils');
     const Registries = require('point_of_sale.Registries');
 
-    ks_models.load_fields('product.product', ['type', 'qty_available']);
+    ks_models.load_fields('product.product', ['type', 'qty_available', 'virtual_available', 'name']);
     var ks_super_pos = ks_models.PosModel.prototype;
 
     ks_models.PosModel = ks_models.PosModel.extend({
@@ -38,7 +38,7 @@ odoo.define('ks_pos_low_stock_alert.ks_low_stock', function (require) {
                 if(!self.config.allow_order_when_product_out_of_stock){
                     var ks_blocked_product_ids = [];
                     for(var i = 0; i < ks_products.length; i++){
-                        if(ks_products[i].qty_available <= 0 && ks_products[i].type == 'product'){
+                        if(ks_products[i].virtual_available <= 0 && ks_products[i].type == 'product'){
                             ks_blocked_product_ids.push(ks_products[i].id);
                         }
                     }
@@ -59,7 +59,7 @@ odoo.define('ks_pos_low_stock_alert.ks_low_stock', function (require) {
                 self.db.qty_by_product_id = {};
             }
             ks_products.forEach(ks_product => {
-                self.db.qty_by_product_id[ks_product.id] = ks_product.qty_available;
+                self.db.qty_by_product_id[ks_product.id] = ks_product.virtual_available;
             });
             self.ks_update_qty_on_product();
         },
@@ -69,7 +69,7 @@ odoo.define('ks_pos_low_stock_alert.ks_low_stock', function (require) {
             var ks_products = self.db.product_by_id;
             var ks_product_quants = self.db.qty_by_product_id;
             for(var pro_id in self.db.qty_by_product_id){
-                ks_products[pro_id].qty_available = ks_product_quants[pro_id];
+                ks_products[pro_id].virtual_available = ks_product_quants[pro_id];
             }
         },
 
@@ -86,7 +86,7 @@ odoo.define('ks_pos_low_stock_alert.ks_low_stock', function (require) {
             ks_order.orderlines.forEach(line => {
                 var ks_product = line.get_product();
                 if(ks_product.type == 'product'){
-                    ks_product.qty_available -= line.get_quantity();
+                    ks_product.virtual_available -= line.get_quantity();
                     self.ks_update_qty_by_product_id(self, [ks_product]);
                 }
             });
