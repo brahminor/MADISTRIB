@@ -13,7 +13,7 @@ odoo.define('tit_pos_cmd_facture.FacturesNonPayee', function (require) {
     models.load_models({
         model: 'account.move',
         fields: [],
-        domain: function(self){return [['payment_state','in',['not_paid','partial']],['move_type','in',['out_invoice']],['state','!=','cancel'],['invoice_date_due', '<=',new Date()]]; },
+        domain: function(self){return [['payment_state','in',['not_paid','partial']],['move_type','in',['out_invoice']],['state','!=','cancel']]; },
         loaded: function(self,factures_non_payees){
             self.factures_non_payees = factures_non_payees;
         },

@@ -58,49 +58,8 @@ odoo.define('tit_pos_acomptes.SaleOrderManagementScreen', function (require) {
             let or = this.env.pos.get_order()
             this.load_commande(com, id);
         }
-        async get_commande_lines(commande_id,id) {
-            /*
-            @param : commande_id = identifiant de la commande selectinnée
-            cette fonction permet de retourner les lignes de sale order associées
-            à la commande qui a id = commande_id
-            id: id de l'enregistrement du sale order selectionné
-            */
-            var self = this;
-            var lines = [];
-            rpc.query({
-                model: 'sale.order.line',
-                method: 'search_read',
-                args: [[['order_id','=',id]], []],
-                }).then(function(lignes_de_cmd){
-                    for (var i = 0; i < lignes_de_cmd.length; i++) {
-                        lines.push(lignes_de_cmd[i]);
-                    }
-                    var order = self.env.pos.add_new_order();
-                    //récupérer la commande selectinnée
-                    var commande = commande_id
-                    //modifier client de la commande crée
-                    order.set_client(self.env.pos.db.get_partner_by_id(commande.partner_id[0]));
-                    // récupérer les order line de la commande selectionnée
-                    order.commande_id = id;
-                    order.commande_id_acompte = id;
-
-                    for (var i=0; i < lines.length; i++) {
-                        var product = self.env.pos.db.get_product_by_id(lines[i].product_id[0])
-                        if (lines[i].product_uom_qty == 0){
-                            //ie produit acompte qu'on a enregistrer dans la liste des articles dans pos commande avec prix saisi et qte 0 mais dans pos order la qte est 1
-                            var qty = -1
-                        }else{
-                            var qty = parseFloat(lines[i].product_uom_qty)
-                        }
-                        var discount = parseInt(lines[i].discount)
-                        var price = parseFloat(lines[i].price_unit)
-                        order.add_product(product,{quantity : qty, price : price, discount : discount})
-                    } 
-                    self.env.pos.delete_current_order();
-                    self.env.pos.set_order(order);
-                    });
-        }
         async load_commande (commande_id, id) {
+            var id_de_cmd = id;
             /*cette fonction permet de faire le chargement dans la page de
              saisie de cmd
              @param:
@@ -111,15 +70,22 @@ odoo.define('tit_pos_acomptes.SaleOrderManagementScreen', function (require) {
             const { confirmed, payload: selectedOption } = await this.showPopup('SelectionPopup',
                 {
                     title: this.env._t('Qu\'est ce que vous voulez faire ?'),
-                    list: [{id:"0", label: "Appliquer un acompte (%)", item: 0},  {id:"1", label: "Appliquer un acompte ( Montant fixe )", item: 1}, {id:"2", label: "Régler la commande", item: 2}],
+                    list: [{id:"0", label: "Appliquer un acompte (%)", item: 0},  {id:"1", label: "Appliquer un acompte ( Montant fixe )", item: 1}, {id:"2", label: "Régler la totalité de la commande", item: 2}],
                 });
                 if(confirmed)
                 {
                     if (selectedOption == 2){
                         //Régler la commande
+                        var order = this.env.pos.get_order();
                         order.selected_option = 2
-                            
-                        this.get_commande_lines(commande_id,commande_id.id)
+                        var self_1 = this;
+                        rpc.query({
+                            model: 'sale.order',
+                            method: 'creer_facture_totale',
+                            args: [id_de_cmd]
+                        }).then(function(invoice_generated){
+                            self_1.showScreen('FactureDetails', { facture_selected: invoice_generated });
+                        })
                 } 
                 else if (selectedOption == 0)
                 {

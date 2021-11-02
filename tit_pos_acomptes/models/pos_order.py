@@ -36,13 +36,11 @@ class pos_order(models.Model):
 				journal = self.env['account.journal'].browse(journal_id)
 				if journal.type == 'avoir_type' and journal.avoir_journal == True and cmd_principale:
 					#si le journal choisi est un avoir, débiter le montant depuis avoir du client
-					client_associe = self.env['res.partner'].browse(cmd_principale.partner_id.id)
-					if client_associe:
-						if amount > client_associe.avoir_client:
-							return client_associe.avoir_client
-						else:
-							client_associe.avoir_client = client_associe.avoir_client - amount
-			
+					if amount > cmd_principale.partner_id.avoir_client:
+						return cmd_principale.partner_id.avoir_client
+					else:
+						cmd_principale.partner_id.avoir_client = cmd_principale.partner_id.avoir_client - amount
+				
 				so = []
 				invoice_generated = 0
 				for i in cmd_principale:

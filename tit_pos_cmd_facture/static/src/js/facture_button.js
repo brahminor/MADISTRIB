@@ -29,7 +29,7 @@ odoo.define('tit_pos_cmd_facture.RewardButton2', function(require) {
             rpc.query({
                 model: 'account.move',
                 method: 'search_read',
-                args: [[['payment_state','in',['not_paid','partial']],['move_type','in',['out_invoice']],['state','!=','cancel'],['invoice_date_due', '<=',new Date()]], []],
+                args: [[['payment_state','in',['not_paid','partial']],['move_type','in',['out_invoice']],['state','!=','cancel']], []],
             }).then(function (factures_non_payees){
                 self.env.pos.factures_non_payees = factures_non_payees;
                 self.showScreen('FacturesNonPayee');

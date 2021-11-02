@@ -20,7 +20,8 @@ class account_move(models.Model):
             factures_a_payer.append(int(i))
         
         amount = float(amount)
-        invoice_id = int(invoice_ids[0])
+        if invoice_ids:
+            invoice_id = int(invoice_ids[0])
         methode_paiement_record = self.env['pos.payment.method'].browse(int(id_meth_pay))
         if methode_paiement_record:
             #chercher le journal associé à la méthode de paiement utilisée pour le paiement sur le pos

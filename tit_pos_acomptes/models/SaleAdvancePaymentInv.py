@@ -12,10 +12,25 @@ class SaleAdvancePaymentInv(models.TransientModel):
     
 
     def create_invoices_from_pos(self):
-        #Cette fontion permet de créer une facture pour l'acompte payé depuis le pos
+        """
+        Cette fontion permet de créer une facture pour l'acompte payé depuis le pos
+        cette fonction retourne  la facture générée
+        """
         sale_orders = self.env['sale.order'].browse(self._context.get('active_ids', []))    
         if self.advance_payment_method == 'delivered':
-            sale_orders._create_invoices(final=self.deduct_down_payments)
+            donne_de_facture_cree = {}
+            facture_cree = sale_orders._create_invoices(final=self.deduct_down_payments)
+            donne_de_facture_cree['id'] = facture_cree.id
+            donne_de_facture_cree['name'] = facture_cree.name
+            donne_de_facture_cree['state'] = 'draft'
+            donne_de_facture_cree['invoice_date'] = facture_cree.invoice_date
+            donne_de_facture_cree['invoice_date_due'] = facture_cree.invoice_date_due
+            donne_de_facture_cree['payment_state'] = facture_cree.payment_state
+            donne_de_facture_cree['amount_total'] = facture_cree.amount_total
+            donne_de_facture_cree['amount_residual'] = facture_cree.amount_residual
+            donne_de_facture_cree['partner_id'] = [facture_cree.partner_id.id, facture_cree.partner_id.name]
+            donne_de_facture_cree['avoir_client'] = facture_cree.partner_id.avoir_client
+            return donne_de_facture_cree
         else:
             # Create deposit product if necessary
             if not self.product_id:
