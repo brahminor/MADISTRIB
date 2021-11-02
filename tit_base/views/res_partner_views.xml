@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_partner_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="siren_company" attrs="{'invisible': [('company_type', '=', 'person')], 'required': [('company_type', '=', 'company')]}" />
+                <field name="nic_company" attrs="{'invisible': [('company_type', '=', 'person')]}" />
+
+            </xpath>
+
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="credit_limit" />
+                <field name="avoir_client" readonly="1"/>
+            </xpath>
+
+
+            <xpath expr="//field[@name='street']" position="attributes">
+                <attribute name="attrs">{'required': [('company_type', '=', 'company')]}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='phone']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='country_id']" position="attributes">
+                <attribute name="attrs">{'required': [('company_type', '=', 'company')]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

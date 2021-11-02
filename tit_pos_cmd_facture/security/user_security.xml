@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<odoo>
+<data > 
+    <record id="group_resp_logistique" model="res.groups">
+        <field name="name">Responsable Logistique</field>  
+        <field name="category_id" ref="tit_pos_order.module_tit_pos"/>
+    </record>
+</data>
+</odoo>

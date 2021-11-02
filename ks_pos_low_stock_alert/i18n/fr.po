@@ -1,0 +1,114 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ks_pos_low_stock_alert
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-26 10:21+0000\n"
+"PO-Revision-Date: 2019-12-26 10:21+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ks_pos_low_stock_alert
+#. openerp-web
+#: code:addons/ks_pos_low_stock_alert/static/src/js/ks_utils.js:0
+#, python-format
+msgid ""
+" has only  items available. \n"
+" You're trying to order ."
+msgstr "Il n y'a que des articles disponibles. \n"
+"Vous essayez de commander."
+
+#. module: ks_pos_low_stock_alert
+#: model:ir.model.fields,field_description:ks_pos_low_stock_alert.field_pos_config__allow_order_when_product_out_of_stock
+msgid "Allow Order when Product is Out Of Stock"
+msgstr "Autoriser la commande lorsque le produit est en rupture de stock"
+
+#. module: ks_pos_low_stock_alert
+#: model_terms:ir.ui.view,arch_db:ks_pos_low_stock_alert.pos_config
+msgid "Allow Order when Product is Out of Stock"
+msgstr "Autoriser la commande lorsque le produit est en rupture de stock"
+
+#. module: ks_pos_low_stock_alert
+#: model_terms:ir.ui.view,arch_db:ks_pos_low_stock_alert.pos_config
+msgid "Allow order when product is out-of-stock"
+msgstr "Autoriser la commande lorsque le produit est en rupture de stock"
+
+#. module: ks_pos_low_stock_alert
+#. openerp-web
+#: code:addons/ks_pos_low_stock_alert/static/src/js/ks_utils.js:0
+#, python-format
+msgid "Cannot order a product more than its availability"
+msgstr "Impossible de commander un produit plus que sa disponibilité"
+
+#. module: ks_pos_low_stock_alert
+#: model_terms:ir.ui.view,arch_db:ks_pos_low_stock_alert.pos_config
+msgid "Check this to display product stock"
+msgstr "Cochez cette case pour afficher le stock de produits"
+
+#. module: ks_pos_low_stock_alert
+#: model_terms:ir.ui.view,arch_db:ks_pos_low_stock_alert.pos_config
+msgid "Display Product Stock"
+msgstr "Afficher le stock de produits"
+
+#. module: ks_pos_low_stock_alert
+#: model_terms:ir.ui.view,arch_db:ks_pos_low_stock_alert.pos_config
+msgid "Display Quantity of Products in POS"
+msgstr "Afficher la quantité de produits dans le point de vente"
+
+#. module: ks_pos_low_stock_alert
+#: model:ir.model.fields,field_description:ks_pos_low_stock_alert.field_pos_config__display_stock
+msgid "Display Stock of products in POS"
+msgstr "Afficher le stock de produits en PDV"
+
+#. module: ks_pos_low_stock_alert
+#. openerp-web
+#: code:addons/ks_pos_low_stock_alert/static/src/js/ks_low_stock.js:0
+#, python-format
+msgid "Empty Serial/Lot Number"
+msgstr "Numéro de série/lot vide"
+
+#. module: ks_pos_low_stock_alert
+#: model:ir.model.fields,field_description:ks_pos_low_stock_alert.field_pos_config__minimum_stock_alert
+msgid "Minimum Limit to change the stock color for the product"
+msgstr "Limite minimale pour changer la couleur de stock pour le produit"
+
+#. module: ks_pos_low_stock_alert
+#: model_terms:ir.ui.view,arch_db:ks_pos_low_stock_alert.pos_config
+msgid "Minimum Stock Alert"
+msgstr "Alerte de stock minimum"
+
+#. module: ks_pos_low_stock_alert
+#. openerp-web
+#: code:addons/ks_pos_low_stock_alert/static/src/js/ks_low_stock.js:0
+#, python-format
+msgid "One or more product(s) required serial/lot number."
+msgstr "Numéro de série/lot requis pour un ou plusieurs produits."
+
+#. module: ks_pos_low_stock_alert
+#. openerp-web
+#: code:addons/ks_pos_low_stock_alert/static/src/xml/ks_low_stock.xml:0
+#, python-format
+msgid "Out-Of-Stock"
+msgstr "En rupture de stock"
+
+#. module: ks_pos_low_stock_alert
+#: model_terms:ir.ui.view,arch_db:ks_pos_low_stock_alert.pos_config
+msgid "POS Low Stock Alert"
+msgstr "Gestion du niveau stock"
+
+#. module: ks_pos_low_stock_alert
+#: model:ir.model,name:ks_pos_low_stock_alert.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr "Configuration du point de vente"
+
+#. module: ks_pos_low_stock_alert
+#: model_terms:ir.ui.view,arch_db:ks_pos_low_stock_alert.pos_config
+msgid "Show stock in red color when it is lower than"
+msgstr "Afficher le stock en rouge lorsqu'il est inférieur à"

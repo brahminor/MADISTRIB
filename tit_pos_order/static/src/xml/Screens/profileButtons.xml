@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="profileButtons" owl="1">
+       <span class="control-button ctrl_profilebtn" style="font-weight:bold; right:100%; background-color: #00BFFF;">
+           <i role="img" class="fa fa-user"></i>
+           <span> </span>
+           <span>Profile</span>
+       </span>
+   </t>
+</templates>

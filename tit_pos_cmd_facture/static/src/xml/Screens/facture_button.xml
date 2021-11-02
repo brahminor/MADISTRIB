@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="facturesNonPayee2" owl="1">
+       <span class="control-button ctrl_btnFactNonPaye" style="right:100%; background-color: #FFC0CB; font-weight:bold;" >
+           <i class="fa fa-chevron-right"></i>
+           <span> </span>
+           <span>Factures non payées</span>
+       </span>
+   </t>
+</templates>

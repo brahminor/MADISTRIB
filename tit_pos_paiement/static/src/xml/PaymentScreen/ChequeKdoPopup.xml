@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+   <t t-name="ChequeKdoPopup" owl="1">
+       <div role="dialog" class="modal-dialog">
+           <div class="popup popup-couponproducts" style="background-color: #c3e1e6">
+            <p class="title">
+                   <t t-esc="props.title" />
+            </p>
+            <span class="body">
+                     
+                    <br/>
+                    <label class="check_label">Date remise:</label>
+                     <br/>
+                    <input  type="date" t-model="state.inputValue" t-ref="input" style="margin-top: 10px;"></input>
+                 
+               </span>
+               <div class="footer">
+                   <div class="button confirm" t-on-click="confirm">
+                        <t t-esc="props.confirmText" />
+                   </div>
+                    <div class="button cancel" t-on-click="cancel">
+                        <t t-esc="props.cancelText" />
+                   </div>
+
+               </div>
+           </div>
+       </div>
+   </t>
+</templates>

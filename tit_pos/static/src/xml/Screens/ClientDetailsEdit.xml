@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+    <t t-inherit="point_of_sale.ClientDetailsEdit" t-inherit-mode="extension">
+        <xpath expr="//div[@class='client-picture']" position="before">
+            <span class="client-type">
+              (*) Société 
+                <input type="radio" id="company" name="company_type" value="company" t-att-checked='props.partner.company_type == "company" and "checked" or false' t-on-change="captureChange" class="client-type-radio"/>
+                Particulier 
+                <input type="radio" id="person" name="company_type" value="person" class="client-type-radio"  t-att-checked='props.partner.company_type == "person" and "checked" or None' t-on-change="captureChange"/>
+            </span>
+        </xpath>
+        <xpath expr="//input[@class='detail client-name']" position="before">
+            (*)
+        </xpath>
+        <xpath expr="//input[@class='detail client-name']" position="attributes">
+            <attribute name="placeholder">nom et prénom</attribute>
+        </xpath>
+        <xpath expr="//input[@class='detail client-phone']" position="before">
+            (*)
+        </xpath>
+        <xpath expr="//select[@class='detail client-address-country needsclick']" position="before">
+            (*)
+        </xpath>
+        
+        <xpath expr="//div[@class='client-details-right']" position="inside" >   
+
+             <div class='client-detail-siren'>
+                <span class="label"><b>SIREN (*)</b></span>
+                <input class="detail siren" name="siren_company" t-on-change="captureChange" t-att-value="props.partner.siren_company || ''" placeholder="Siren" />
+            </div>
+
+             <div class='client-detail-nic'>
+                <span class="label"><b>NIC</b></span>
+                <input class="detail nic" name="nic_company" t-on-change="captureChange" t-att-value="props.partner.nic_company || ''" placeholder="NIC" />
+            </div>
+
+            <div class='client-detail-credit_limit'>
+                <span class="label"><b>Limite de crédit</b></span>
+                <t t-if="props.partner.credit_limit">
+                    <input class="detail limit_credit" name="credit_limit" t-on-change="captureChange" t-att-value="props.partner.credit_limit.toFixed(2) || ''" placeholder="Limite de crédit" />
+                </t>
+                <t t-else="">
+                    <input class="detail limit_credit" name="credit_limit" t-on-change="captureChange" t-att-value="props.partner.credit_limit|| ''" placeholder="Limite de crédit" />
+                </t>
+                
+                
+                
+            </div>
+
+            <div class='client-detail-avoir'>
+                <span class="label"><b>Avoir</b></span>
+
+                <t t-if="props.partner.avoir_client">
+                    <input class="detail limit_credit" name="avoir_client"   t-on-change="captureChange" t-att-value="props.partner.avoir_client.toFixed(2) || ''" readonly="1" />
+                </t>
+                <t t-else="">
+                    <input class="detail limit_credit" name="avoir_client"   t-on-change="captureChange" t-att-value="props.partner.avoir_client || ''" readonly="1" />
+                </t>
+
+                
+            </div>
+            
+
+            <div class='client-detail'>
+                <span class='label'>Site web</span>
+                <input class="detail site_web" name="website" t-on-change="captureChange" t-att-value="props.partner.website || ''" placeholder="Site web" />
+            </div>
+
+        </xpath>
+        <xpath expr="//div[@class='client-details-left']" position="inside" >
+            <div class='client-detail'>
+                <span class='label'>Position fiscale</span>
+                <select class='detail needsclick' name='property_account_position_id' t-on-change="captureChange">
+                    <t t-foreach='env.pos.fiscal_positions' t-as='accout_position' t-key="accout_position.id">
+                        <option t-att-value='accout_position.id'
+                            t-att-selected="props.partner.property_account_position_id ? 
+                            ((accout_position.id === props.partner.property_account_position_id[0]) ? true : undefined) : undefined">
+                            <t t-esc='accout_position.display_name'/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+        </xpath>
+    </t>
+
+    <t t-name="ClientListScreen" t-inherit="point_of_sale.ClientListScreen" t-inherit-mode="extension" owl="1" >
+        <xpath expr="//table[hasclass('client-list')]/thead/tr" position="inside">
+            <th id="client-list-limite_credit">
+                Limite de crédit
+            </th>
+            <th id="client-list-avoir">
+                Avoir
+            </th>
+        </xpath>
+    </t>
+
+    <t t-extend="ClientLine" t-inherit="point_of_sale.ClientLine" t-inherit-mode="extension" owl="1" >
+        <xpath expr="//tr" position="inside">
+            <td >
+                <t t-if="props.partner.credit_limit">
+                    <t t-esc='props.partner.credit_limit.toFixed(2)'
+                />
+                </t>
+                <t t-else="">
+                    <t t-esc='props.partner.credit_limit'
+                />
+                </t>
+
+                
+            </td>
+            <td >
+                <t t-if="props.partner.avoir_client">
+                    <t t-esc='props.partner.avoir_client.toFixed(2)'
+                />
+                </t>
+                <t t-else="">
+                    <t t-esc='props.partner.avoir_client'
+                />
+                </t>
+            </td>
+        </xpath>
+    </t>
+
+</templates>

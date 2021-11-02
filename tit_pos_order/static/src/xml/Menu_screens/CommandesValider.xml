@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	<t t-name="CommandesValider" owl="1">
+		<div class="ticket-screen screen">
+			<div class="screen-content">
+				<div class="controls">
+					<div class="buttons">
+						<button class="button back" t-on-click="showScreen('ProductScreen')">
+							<i class="fa fa-angle-double-left fa-fw">
+							</i>
+							<span class="back_text">
+								Back
+							</span>
+						</button>
+					</div>
+					<t t-set="placeholder">
+						Recherche commandes...
+					</t>
+					<SearchBar config="searchBarConfig" placeholder="placeholder" />
+				</div>
+				<div class="orders">
+					<div class="orders">
+						<div class="header-row">
+							<div class="col start wide">
+								Réf.commande
+							</div>
+							<div class="col start wide">
+								Date
+							</div>
+							<div class="col start wide">
+								Numéro de reçu
+							</div>
+							<div class="col start wide">
+								Client
+							</div>
+							<div class="col start wide">
+								Total
+							</div>
+							<div class="col start wide">
+								Status
+							</div>
+						</div>
+						<t t-foreach="filteredOrderList" t-as="cmd" t-key="cmd.cid">
+							<div class="order-row pointer" t-on-click="selectOrder(cmd)">
+								<div class="col start wide">
+									<t t-esc="cmd.name" />
+								</div>
+								<div class="col start wide">
+									<t t-esc="getDate(cmd)" />
+								</div>
+								<div class="col start wide">
+									<t t-esc="cmd.pos_reference" />
+								</div>
+								<div class="col start wide">
+									<t t-esc="getClient(cmd)" />
+								</div>
+								<div class="col start wide">
+									<t t-esc="getTotal(cmd)" />
+								</div>
+								<div class="col start wide">
+									<t t-if="cmd.state == 'paid'">
+										Payé
+									</t>
+									<t t-if="cmd.state == 'done'">
+										Comptabilisé
+									</t>
+								</div>
+							</div>
+						</t>
+					</div>
+				</div>
+			</div>
+		</div>
+	</t>
+</templates>

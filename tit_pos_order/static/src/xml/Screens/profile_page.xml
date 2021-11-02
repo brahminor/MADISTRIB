@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="profile_page" owl="1">
+        <div class="ticket-screen screen_profile">
+            <div class="screen-profile">
+                <div class="controls">
+                    <div class="buttons">
+                        <button class="button fact_non_pay" t-on-click="factures_non_paye()">
+                            <i class="fa fa-angle-double-left fa-fw"></i>
+                            <span class="back_text">Factures non payées</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="client-select" style="text-align:center">
+                     <br/> <br/> <br/>
+                    <div>
+                        <span class="label"  style="font-size: 90px; font-weight: bold; color:#22780F">
+                            Bienvenue 
+                        </span>
+                    </div>
+                    <br/><br/>
+                    <div  >
+                        <input class="detail mntnt" name="montant_du" t-att-value="get_user_name() || '_'" readonly="1" style="font-size: 50px; font-weight: bold; color:#6B8E23;"/>
+                    </div>
+                    <br/>  
+            </div>
+        </div></div>
+        </t>
+    </templates>
+
+
