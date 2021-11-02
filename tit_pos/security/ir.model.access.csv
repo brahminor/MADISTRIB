@@ -1,7 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-commande_pos,Commande pos,tit_pos_order.model_pos_commande,point_of_sale.group_pos_user,1,1,1,1
-commande_pos_line,Commande pos line,tit_pos_order.model_pos_commande_line,point_of_sale.group_pos_user,1,1,1,1
-pos_payment_cmd,pos_payment_cmd,tit_pos_order.model_pos_payment_cmd,point_of_sale.group_pos_user,1,1,1,1
+
 
 dmd_prix_caissier,dmd_prix_caissier,sale_purchase_stock.model_purchase_order,tit_pos_order.group_caissier,1,1,1,1
 purchase_stock_caissier,purchase_stock_caissier,sale_purchase_stock.model_sale_order,tit_pos_order.group_caissier,1,1,1,1

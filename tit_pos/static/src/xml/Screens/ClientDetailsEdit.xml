@@ -66,6 +66,19 @@
                 <span class='label'>Site web</span>
                 <input class="detail site_web" name="website" t-on-change="captureChange" t-att-value="props.partner.website || ''" placeholder="Site web" />
             </div>
+          
+             <div class='client-detail'>
+                <span class='label'>Service</span>
+                <select class='detail needsclick' name='service_id' t-on-change="captureChange">
+                   <t t-foreach='env.pos.services' t-as='service' t-key="service.id">
+                        <option t-att-value='service.id'
+                            t-att-selected="props.partner.service_id ? 
+                            ((service.id === props.partner.service_id[0]) ? true : undefined) : undefined">
+                            <t t-esc='service.name'/>
+                        </option>
+                    </t> 
+                </select>
+            </div> 
 
         </xpath>
         <xpath expr="//div[@class='client-details-left']" position="inside" >
@@ -86,6 +99,9 @@
 
     <t t-name="ClientListScreen" t-inherit="point_of_sale.ClientListScreen" t-inherit-mode="extension" owl="1" >
         <xpath expr="//table[hasclass('client-list')]/thead/tr" position="inside">
+            <th id="client-list-service">
+                Service
+            </th>
             <th id="client-list-limite_credit">
                 Limite de crédit
             </th>
@@ -97,6 +113,15 @@
 
     <t t-extend="ClientLine" t-inherit="point_of_sale.ClientLine" t-inherit-mode="extension" owl="1" >
         <xpath expr="//tr" position="inside">
+            <td >
+                <t t-if="props.partner.service_id">
+                    <t t-esc='props.partner.service_id[1]'
+                />
+                </t>
+                <t t-else="">
+                    <span class="label"> </span>
+                </t>
+            </td>
             <td >
                 <t t-if="props.partner.credit_limit">
                     <t t-esc='props.partner.credit_limit.toFixed(2)'

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="SaleOrderManagementScreen" owl="1">
+        <div class="ticket-screen screen">
+            <div class="screen-content">
+                <div class="controls">
+                    <div class="buttons">
+                        <button class="button back" t-on-click="show_new_screeen()">
+                            <span class="back_text">Fermer</span>
+                        </button>
+                    </div>
+                    <t t-set="placeholder">Recherche Devis/commandes ...</t>
+                    <SearchBar config="searchBarConfig" placeholder="placeholder" />
+                </div>
+                <div class="orders">
+                    <div class="orders">
+                        <div class="header-row">
+                            <div class="col start wide">Commande</div>
+                            <div class="col start wide">Date</div>
+                            <div class="col start wide">Client</div>
+                            <div class="col start wide">Vendeur</div>
+                            <div class="col start wide">Total</div>
+                            <div class="col start wide">Acompte</div>
+                            <div class="col start wide">Montant dû</div>
+                            <div class="col start wide">Etat</div>  
+                        </div>
+                        <t t-foreach="sale_ordersFiltre" t-as="cmd" t-key="cmd.cid" >
+                            <div class="order-row pointer" t-on-click="selectOrder(cmd, cmd.id)">     
+                                <div class="col start wide">
+                                    <t t-esc="cmd.name"/> 
+                                </div>
+                                <div class="col start wide">
+                                    <t t-esc="getDate(cmd)"/> 
+                                </div>
+                                <div class="col start wide">
+                                     <t t-esc="cmd.partner_id[1]"/>
+                                </div>
+                                <div class="col start wide">
+                                     <t t-esc="cmd.user_id[1]"/>
+                                </div>
+                                <div class="col start wide">
+                                     <t t-esc="cmd.amount_total.toFixed(2)"/>
+                                </div>
+                                <div class="col start wide">
+                                     <t t-esc="cmd.acompte.toFixed(2)"/>
+                                </div>
+                                <div class="col start wide">
+                                     <t t-esc="cmd.montant_du.toFixed(2)"/>
+                                </div>
+                                <t t-if="cmd.state == 'draft'">
+                                    <div class="col start wide"  style="font-weight:bold; color: #2C75FF">
+                                        Devis
+                                    </div>
+                                </t>
+                                <t t-elif="cmd.state == 'sent'">
+                                    <div class="col start wide"  style="font-weight:bold; color: #2C75FF">
+                                        Devis envoyé
+                                    </div>
+                                </t>
+                                <t t-elif="cmd.state == 'sale'">
+                                    <div class="col start wide" style="font-weight:bold; color: #34C924">
+                                        Bon de commande
+                                    </div>
+                                </t>  
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
+
+

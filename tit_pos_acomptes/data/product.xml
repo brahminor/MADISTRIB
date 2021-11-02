@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+		<record id="article_acompte_pos" model="product.product">
+			<field name="name">Acompte (POS)</field>
+			<field name="sale_line_warn">no-message</field>
+			<field name="purchase_line_warn">no-message</field>
+			<field name="sale_ok" eval="True"/>
+			<field name="purchase_ok" eval="False"/>
+			<field name="taxes_id" eval="False"/>
+			<field name="lst_price" eval="0"/>
+			<field name="available_in_pos" eval="True"/>
+			<field name="type">service</field>
+			<field name="tracking">none</field>
+			<field name="categ_id" ref="point_of_sale.product_category_pos"/>
+		</record>
+
+		<record model="pos.config" id="point_of_sale.pos_config_main">
+            <field name="down_payment_product_id" ref="tit_pos_acomptes.article_acompte_pos"/>
+        </record>
+	</data>
+</odoo>

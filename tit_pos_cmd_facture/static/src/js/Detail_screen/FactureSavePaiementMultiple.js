@@ -102,7 +102,7 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiementMultiple', function (require
                                 else if (u != 1){
                                     self.showPopup('ErrorPopup', {
                                         title:('L\'avoir est insuffisant'),
-                                        body:('Vous avez que  '+u+ ' comme avoir')
+                                        body:('Vous avez que  '+u.toFixed(2)+ ' comme avoir')
                                     });
                                 }
                     });
