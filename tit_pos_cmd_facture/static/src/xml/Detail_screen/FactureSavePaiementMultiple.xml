@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="FactureSavePaiementMultiple" owl="1">
+        <div class="ticket-screen screen">
+            <div class="screen-facture">
+                <div class="controls">
+                    <div class="buttons_back">
+                        <button class="button back" t-on-click="showScreen('FacturesNonPayee')">
+                            <span class="back_text">Fermer</span>
+                        </button>  
+                    </div> 
+                            <div class="button_enreg_paiement_btn">
+                                <button class='button button_enreg_paiement' title="Enregistrer le paiement" style="right:100%; background-color: #32CD32;"  t-on-change="captureChange" t-on-click="enregistrer_paiement()">
+                                   Créer un paiement
+                                </button>
+                            </div>
+
+                    </div>
+                <div class="client-select" style="font-size: 24px; font-weight: bold;">
+                    <div class="edit_client_selected">
+                        <span class="label">Client  :</span>
+                        <input class="detail client_selectionne" name="client_recuperes_name" t-att-value="props.client_name" readonly="1" style="font-size: 22px;"/>
+                    </div>
+                    <br/>
+                    <div class="edit_client_selected" style=" color:RED; ">
+                        <span class="label">Avoir du client  :</span>
+                        <input class="detail client_selectionne" name="client_recuperes_avoir" t-att-value="props.avoir_client" readonly="1" style="font-size: 22px;  color:RED;"/>
+                    </div>
+                    <br/>
+
+
+                    <div>
+                        <span class="label">Montant dû  :</span>
+                        <input class="detail mntnt" name="montant_total" t-att-value="props.montant_total_du" readonly="1" style="font-size: 22px;"/>
+                    </div> 
+                    <br/>
+                    <div>
+                        <span class="label">Montant à régler  :</span>
+                        <input class="detail mntnt" name="montant_saisi" t-att-value="props.montant_total_du"  t-on-change="captureChange" style="font-size: 22px;    "/>
+                    </div>
+                    <br/>
+                    <div class="client-detail amount-input">
+                        <span class="label lb-journal-inv">Mode de règlement</span>
+                          <select class='detail needsclick journal-inv-payment' name='facture_recuperes_id' t-on-change="captureChange" style="font-size: 22px;">
+                                <option value=''>None</option>
+                                <t t-foreach='env.pos.journals_recuperes' t-as='journal'>
+                                    <t t-if="journal.type == 'bank' or journal.type == 'cash'" >
+                                        <option t-att-value='journal.id'>
+                                            <t t-esc="journal.name"/>
+                                        </option>
+                                    </t>
+                                    <t t-elif="journal.type == 'avoir_type' and journal.avoir_journal == true">
+                                        <option t-att-value='journal.id'>
+                                            <t t-esc="journal.name"/>
+                                        </option>
+                                    </t>
+                                </t>
+                            </select>
+                    </div>
+
+                    
+            </div>
+        </div></div>
+        </t>
+    </templates>
+
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+   <t t-name="ValidationCommandePopup" owl="1">
+       <div role="dialog" class="modal-dialog">
+           <div class="popup popup-couponproducts" style="background-color: #FF8C00">
+               
+               <p class="title">
+                   <t t-esc="props.title" />
+               </p>
+
+               <div class="footer">
+                <p class="body">
+                   <t t-esc="props.body" />
+               </p>
+
+                   <div class="button confirm" t-on-click="confirm">
+                        <t t-esc="props.confirmText" />
+                   </div>
+                   <div class="button cancell" t-on-click="cancel">
+                        <t t-esc="props.cancelText" />
+                   </div>
+
+               </div>
+           </div>
+       </div>
+   </t>
+</templates>

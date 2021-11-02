@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <record id="pos_order_tree_inherit_view" model="ir.ui.view">
+        <field name="name">pos.order.tree.inherit</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="level_progress" widget="progressbar"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_pos_order_inherited_form" model="ir.ui.view">
+        <field name="name">pos.order.form</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+           
+            <xpath expr="//div[hasclass('oe_button_box')]/button[@name='action_view_invoice']" position="before">
+                <label for="level_progress" string="Etat expédition"/>
+                <field name="level_progress" widget="progressbar"  string="Etat expédition" />
+           </xpath>
+            <xpath expr="//field[@name='state']" position="before">
+                    
+                    <field name="etat_cmd" readonly="1" groups="tit_pos_order.group_resp_logistique" attrs="{'invisible':[('etat_cmd','in',['en_cours_prep','expediee','validee'])]}" style=" size:40px; color:white; background-color:GREEN; font-weight: bold;"/> 
+                    
+                    <field name="etat_cmd" readonly="1" groups="tit_pos_order.group_resp_logistique" attrs="{'invisible':[('etat_cmd','in',['validee','livree'])]}" style="color:white;  size:40px; background-color:BROWN; font-weight: bold;"/> 
+                    
+                    <field name="etat_cmd"  readonly="1" groups="tit_pos_order.group_resp_logistique" attrs="{'invisible':[('etat_cmd','in',['en_cours_prep','expediee','livree'])]}" style=" size:40px; color:white; background-color:RED; font-weight: bold;"/> 
+
+                    <button name="cmd_en_cours_prep" groups="tit_pos_order.group_resp_logistique" attrs="{'invisible':[('etat_cmd','in',['expediee','en_cours_prep','livree'])]}" string="Commande en cours de préparation" type="object" />
+                    <button name="cmd_expediee" groups="tit_pos_order.group_resp_logistique" attrs="{'invisible':[('etat_cmd','in',['expediee','validee','livree'])]}" string="Commande expédiée" type="object"  />
+
+                    <button name="cmd_livree" groups="tit_pos_order.group_resp_logistique" attrs="{'invisible':[('etat_cmd','in',['livree','validee','en_cours_prep'])]}"   string="Commande livrée" type="object"/>
+
+            </xpath>
+
+
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="CommandesValiderButton" owl="1">
+       <div class="ticket-button ticket_cmd_valide" >
+           <div class="with-badge" t-att-badge="count">
+               <i class="fa fa-ticket" aria-hidden="true"></i>
+           </div>
+           <div>Commandes validées</div>
+       </div>
+   </t>
+
+   <t t-name="CmdVendeurButton" owl="1">
+       <div class="ticket-button ticket_cmd_vendeur" >
+           <div class="with-badge" t-att-badge="count">
+               <i class="fa fa-ticket" aria-hidden="true"></i>
+           </div>
+           <div>Liste des commandes</div>
+       </div>
+   </t>
+   <t t-name="CustomTicketButtons" owl="1">
+       <div class="ticket-button ticket_cmd_attente" >
+           <div class="with-badge" t-att-badge="count">
+               <i class="fa fa-ticket" aria-hidden="true"></i>
+           </div>
+           <div >Commandes réglées partiellement</div>
+       </div>
+   </t>
+
+    <t t-inherit="point_of_sale.Chrome" t-inherit-mode="extension">
+       
+        <xpath expr="//TicketButton" position="before">
+               <CustomTicketButtons />
+       </xpath>
+       <xpath expr="//TicketButton" position="before">
+               <CmdVendeurButton />
+       </xpath>
+
+   </t>
+
+
+</templates>

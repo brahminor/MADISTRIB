@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_pos_cmd_vendeur_form" model="ir.ui.view">
+            <field name="name">pos.cmd_vendeur.form</field>
+            <field name="model">pos.cmd_vendeur</field>
+            <field name="arch" type="xml">
+                <form string="Commande" edit="false" create="false">
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group col="4" colspan="4">
+                            <field name="partner_id" />
+                            <field name="date"/>
+                            <field name="vendeur_name" />
+                            <field name="session_id"/>
+                             <field name="config_id"/>
+                             <field name="journal_id"/>
+                             <field name="commande_suivante" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Lignes de commande">
+                                <field name="order_line" colspan="4" nolabel="1">
+                                    <tree string="Lignes de commandes" editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="qty"/>
+                                        <field name="price_unit" widget="monetary"/>
+                                        <field name="discount" widget="monetary"/>
+                                        <field name="tax_ids" widget="many2many_tags"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        
+                                    </tree>
+                                </field>
+
+                                  
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_pos_cmd_vendeur_tree" model="ir.ui.view">
+            <field name="name">pos.cmd_vendeur.tree</field>
+            <field name="model">pos.cmd_vendeur</field>
+            <field name="arch" type="xml">
+                <tree string="Commande" decoration-success="state=='done'" decoration-muted="state in ('archived','annule')" create='false' edit="false">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="date"/>
+                    <field name="session_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="pos_cmd_vendeur_action" model="ir.actions.act_window">
+            <field name="name">Commandes validées par vendeur</field>
+            <field name="res_model">pos.cmd_vendeur</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                 <p class="oe_view_nocontent_create">
+                    Créer votre première commande vendeur.
+                 </p>
+            </field>
+        </record>
+
+        <menuitem id="pos_commande_vendeur_menu" parent="point_of_sale.menu_point_of_sale" name="Commandes validées par vendeur" action="pos_cmd_vendeur_action" groups="point_of_sale.group_pos_user"/>
+                    
+        
+                    
+    </data>
+</odoo>
