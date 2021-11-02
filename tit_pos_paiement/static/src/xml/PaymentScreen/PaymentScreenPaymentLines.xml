@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="tit_pos_paiement.PaymentScreenPaymentLines" t-inherit="point_of_sale.PaymentScreenPaymentLines" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[@class='delete-button']" position="after">
+        <t t-if="line.payment_method.type_cheque=='deferred_check'">
+            <div class='edit-cheque-button' t-on-click="trigger('edit-cheque', { cid: line.cid })" t-att-data-cid='line.cid' aria-label="Saisir ..." title="Saisir">
+                <i class='fa fa-caret-down'/> 
+            </div>
+        </t>
+       
+         <t t-if="line.payment_method.type_cheque=='check'">
+            <div class='edit-cheque-button' t-on-click="trigger('edit-cheque_normal', { cid: line.cid })" t-att-data-cid='line.cid' aria-label="Saisir ..." title="Saisir">
+                <i class='fa fa-caret-down'/> 
+            </div>
+        </t>
+        <t t-if="line.payment_method.type_cheque=='check_kdo'">
+            <div class='edit-cheque-button' t-on-click="trigger('edit-cheque_kdo', { cid: line.cid })" t-att-data-cid='line.cid' aria-label="Saisir ..." title="Saisir">
+                <i class='fa fa-caret-down'/> 
+            </div>
+        </t> 
+
+        </xpath>
+    </t>
+
+</templates>

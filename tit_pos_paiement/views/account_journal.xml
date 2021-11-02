@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+        <record id="view_account_journal_pos_user_form" model="ir.ui.view">
+            <field name="name">account.journal.pos.user.form.inherit</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="point_of_sale.view_account_journal_pos_user_form"/>
+            <field name="arch" type="xml">
+            	<field name="type" position="after">
+            		<field name="deferred_check" attrs="{'invisible' : [('type','!=','bank')]}"/>
+                    <field name="check" attrs="{'invisible' : [('type','!=','bank')]}"/>
+                    <field name="check_kdo" attrs="{'invisible' : [('type','!=','bank')]}"/>
+                     <field name="avoir_journal" attrs="{'invisible' : [('type','!=','avoir_type')]}"/>
+            	</field>
+
+                <xpath expr="//page[@name='journal_entries']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_debit_account_id']" position="attributes">
+                    <attribute name="attrs">{'required': [('id', '!=', False), ('type', 'in', ('bank', 'cash','avoir_type'))], 'invisible': [('type', 'not in', ('bank', 'cash','avoir_type'))]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='inbound_payment_method_ids']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('type', 'not in', ['bank', 'cash','avoir_type'])]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_credit_account_id']" position="attributes">
+                    <attribute name="attrs">{'required': [('id', '!=', False), ('type', 'in', ('bank', 'cash','avoir_type'))], 'invisible': [('type', 'not in', ('bank', 'cash','avoir_type'))]}</attribute>
+
+                </xpath>
+                <xpath expr="//field[@name='outbound_payment_method_ids']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('type', 'not in', ['bank', 'cash','avoir_type'])]}</attribute>
+                </xpath>
+
+            </field>
+        </record>
+	</data>
+</odoo>

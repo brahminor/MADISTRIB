@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+    <t t-inherit="point_of_sale.ClientDetailsEdit" t-inherit-mode="extension">
+        <xpath expr="//div[@class='client-picture']" position="before">
+            <span class="client-type">
+              (*) Société 
+                <input type="radio" id="company" name="company_type" value="company" t-att-checked='props.partner.company_type == "company" and "checked" or false' t-on-change="captureChange" class="client-type-radio"/>
+                Particulier 
+                <input type="radio" id="person" name="company_type" value="person" class="client-type-radio"  t-att-checked='props.partner.company_type == "person" and "checked" or None' t-on-change="captureChange"/>
+            </span>
+        </xpath>
+        <xpath expr="//input[@class='detail client-name']" position="before">
+            (*)
+        </xpath>
+        <xpath expr="//input[@class='detail client-name']" position="attributes">
+            <attribute name="placeholder">nom et prénom</attribute>
+        </xpath>
+         <xpath expr="//input[@class='detail client-email']" position="before">
+            (*)
+        </xpath>
+        <xpath expr="//input[@class='detail client-phone']" position="before">
+            (*)
+        </xpath>
+        <xpath expr="//select[@class='detail client-address-country needsclick']" position="before">
+            (*)
+        </xpath>
+        
+        <xpath expr="//div[@class='client-details-right']" position="inside" >   
+
+             <div class='client-detail-siren'>
+                <span class="label">SIREN (*)</span>
+                <input class="detail siren" name="siren_company" t-on-change="captureChange" t-att-value="props.partner.siren_company || ''" placeholder="Siren" />
+            </div>
+
+             <div class='client-detail-nic'>
+                <span class="label">NIC (*)</span>
+                <input class="detail nic" name="nic_company" t-on-change="captureChange" t-att-value="props.partner.nic_company || ''" placeholder="NIC" />
+            </div>
+
+            <div class='client-detail'>
+                <span class='label'>Site web (*)</span>
+                <select class='detail needsclick' name='website' t-on-change="captureChange">
+                    <t t-foreach='env.pos.websites' t-as='website_id' t-key="website_id.id">
+                        <option t-att-value='website_id.name' >
+                            <t t-esc='website_id.name'/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+
+        </xpath>
+        <xpath expr="//div[@class='client-details-left']" position="inside" >
+            <div class='client-detail'>
+                <span class='label'>Position fiscale</span>
+                <select class='detail needsclick' name='property_account_position_id' t-on-change="captureChange">
+                    <t t-foreach='env.pos.fiscal_positions' t-as='accout_position' t-key="accout_position.id">
+                        <option t-att-value='accout_position.id'
+                            t-att-selected="props.partner.property_account_position_id ? 
+                            ((accout_position.id === props.partner.property_account_position_id[0]) ? true : undefined) : undefined">
+                            <t t-esc='accout_position.display_name'/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+        </xpath> 
+        
+    </t>
+</templates>
