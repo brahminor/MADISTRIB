@@ -10,11 +10,10 @@
             <script type="text/javascript" src="/tit_pos_order/static/src/js/ValidationCommandePopup.js"></script>
             <script type="text/javascript" src="/tit_pos_order/static/src/js/ValidationCommandeSucces.js"></script>
             <script type="text/javascript" src="/tit_pos_order/static/src/js/Menu_screens/category_screen.js"></script>
+            <script type="text/javascript" src="/tit_pos_order/static/src/js/Menu_screens/ClientListScreenScreen.js"></script>
             <script type="text/javascript" src="/tit_pos_order/static/src/js/Payment_screen/PaymentScreen.js"></script>
             <script type="text/javascript" src="/tit_pos_order/static/src/js/Payment_screen/CustomButtonTicketScreen.js"></script>
-            <script type="text/javascript" src="/tit_pos_order/static/src/js/Menu_screens/TicketScreenEnAttente.js"></script>
             <script type="text/javascript" src="/tit_pos_order/static/src/js/Menu_screens/TicketScreenCmdVendeur.js"></script>
-            <script type="text/javascript" src="/tit_pos_order/static/src/js/Menu_screens/CustomTicketButtons.js"></script>
             <script type="text/javascript" src="/tit_pos_order/static/src/js/Menu_screens/CmdVendeurButton.js"></script>
             <script type="text/javascript" src="/tit_pos_order/static/src/js/Menu_screens/CommandesValiderButton.js"></script>
             <script type="text/javascript" src="/tit_pos_order/static/src/js/Menu_screens/CommandesValider.js"></script>

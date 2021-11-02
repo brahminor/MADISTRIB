@@ -31,5 +31,15 @@
         <field name="category_id" ref="tit_pos_order.module_tit_pos"/>
     </record>
     
+
+    <record id="group_commercial" model="res.groups">
+        <field name="name">Commercial</field>  
+        <field name="category_id" ref="tit_pos_order.module_tit_pos"/>
+    </record>
+
+    <record id="group_resp_Commercial" model="res.groups">
+        <field name="name">Responsable Commercial</field>  
+        <field name="category_id" ref="tit_pos_order.module_tit_pos"/>
+    </record>
 </data>
 </odoo>

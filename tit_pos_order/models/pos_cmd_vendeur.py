@@ -20,8 +20,7 @@ class pos_commande(models.Model):
     order_line = fields.One2many('pos.cmd_vendeur.line', 'order_id')
     company_id = fields.Many2one('res.company', related = "session_id.config_id.company_id")
     currency_id = fields.Many2one('res.currency', string = "Devise", default = lambda self: self.env.user.company_id.currency_id)
-    payment_ids = fields.One2many('pos.payment_cmd', 'pos_commande_id', string='Paiements')
-
+    
     @api.model
     def create_commande(self, commande):
         #cette fonction permet de créer la commande en attente depuis point of sale ui

@@ -7,8 +7,7 @@ odoo.define('tit_pos.screens', function(require) {
     var models = require('point_of_sale.models');
     const { useState } = owl.hooks;
     var rpc = require('web.rpc');
-    
-    models.load_fields('res.partner',[ 'customer_rank', 'property_account_position_id', 'company_type', 'child_ids', 'type', 'website', 'siren_company', 'nic_company','credit_limit', 'avoir_client']);
+    models.load_fields('res.partner',[ 'customer_rank', 'property_account_position_id', 'company_type', 'child_ids', 'type', 'website', 'siren_company', 'nic_company','credit_limit', 'avoir_client','service_id']);
     var _super_pos_model = models.PosModel.prototype;
     var _models = models.PosModel.prototype.models;
 

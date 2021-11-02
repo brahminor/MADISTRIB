@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="devis_cmd_list" owl="1">
+       <span class="control-button ctrl_btndevis_cmd_list" style="right:100%; background-color: #00BFFF; font-weight:bold;" >
+           <i class="fa fa-clock-o"></i>
+           <span> </span>
+           <span>Commandes B2B</span>
+       </span>
+   </t>
+</templates>

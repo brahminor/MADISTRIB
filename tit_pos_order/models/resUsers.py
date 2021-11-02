@@ -21,6 +21,10 @@ class resUsers(models.Model):
             return 4
         elif user_actif and user_actif.has_group('tit_pos_order.group_srvce_livraison'):
             return 5
+        elif user_actif and user_actif.has_group('tit_pos_order.group_commercial'):
+            return 8
+        elif user_actif and user_actif.has_group('tit_pos_order.group_resp_Commercial'):
+            return 9
         elif user_actif and user_actif.has_group('tit_pos_order.group_resp_caisse'):
             return 6
         elif user_actif and user_actif.has_group('point_of_sale.group_pos_manager'):

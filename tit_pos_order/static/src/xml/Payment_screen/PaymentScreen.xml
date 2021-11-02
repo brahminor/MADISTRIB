@@ -16,14 +16,7 @@
                             0.0
                         </div>
                     </div>
-                   <div id="my_button" class="button js_invoice"
-                       t-on-click="IsCustomButton" style="font-size: 18px; background-color: #32CD32">
-                       <i class='fa fa-download' /> 
-                       <b>Sauvegarder l'acompte</b>
-                   </div>
-
-                    
-
+                
                 </div>
            </xpath>
 
