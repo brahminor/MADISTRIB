@@ -19,7 +19,7 @@
                 <div class="client-select" style="font-size: 24px; font-weight: bold;">
                     <div>
                         <span class="label">Référence  :</span>
-                        <input class="detail mntnt" name="ref" t-att-value="props.facture_selected.name || ''" readonly="1" style="font-size: 22px; "/>
+                        <input class="detail mntnt" id="ref_fact" name="ref" t-att-value="get_ref_client(props.facture_selected.id)" readonly="1" style="font-size: 22px; "/>
                     </div>
                     <br/>
                     <div class="edit_client_selected">

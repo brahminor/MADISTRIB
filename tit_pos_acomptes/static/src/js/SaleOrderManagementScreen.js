@@ -70,7 +70,7 @@ odoo.define('tit_pos_acomptes.SaleOrderManagementScreen', function (require) {
             const { confirmed, payload: selectedOption } = await this.showPopup('SelectionPopup',
                 {
                     title: this.env._t('Qu\'est ce que vous voulez faire ?'),
-                    list: [{id:"0", label: "Appliquer un acompte (%)", item: 0},  {id:"1", label: "Appliquer un acompte ( Montant fixe )", item: 1}, {id:"2", label: "Régler la totalité de la commande", item: 2}],
+                    list: [{id:"0", label: "Appliquer un acompte (%)", item: 0},  {id:"1", label: "Appliquer un acompte ( Montant fixe )", item: 1}, {id:"2", label: "Facture normale", item: 2}],
                 });
                 if(confirmed)
                 {
@@ -92,7 +92,7 @@ odoo.define('tit_pos_acomptes.SaleOrderManagementScreen', function (require) {
                     //Appliquer un acompte (%)
                     let down_payment = commande_id.amount_total;
                     const { confirmed, payload } = await this.showPopup('NumberPopup', {
-                        title: sprintf(this.env._t("Montant dû %s (règlement en %)"), this.env.pos.format_currency(commande_id.montant_du)),
+                        title: sprintf(this.env._t("Montant dû %s"), this.env.pos.format_currency(commande_id.montant_du)),
                         startingValue: 0,
                     });
                     if (confirmed){
@@ -120,7 +120,7 @@ odoo.define('tit_pos_acomptes.SaleOrderManagementScreen', function (require) {
                     //Appliquer un acompte ( Montant fixe )
                     let down_payment = commande_id.amount_total;
                     const { confirmed, payload } = await this.showPopup('NumberPopup', {
-                        title: sprintf(this.env._t(" Montant dû %s (règlement avec montant fixe)"), this.env.pos.format_currency(commande_id.montant_du)),
+                        title: sprintf(this.env._t(" Montant dû %s "), this.env.pos.format_currency(commande_id.montant_du)),
                         startingValue: 0,
                     });
                     if (confirmed){

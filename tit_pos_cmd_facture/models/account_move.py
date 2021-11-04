@@ -7,6 +7,20 @@ class account_move(models.Model):
 
     avoir_client = fields.Float("Avoir client", compute='_get_avoir_client')
 
+    @api.model
+    def get_ref_facture(self, id_fac):
+        """
+        Cette fonction permet de chercher la facture qui a l'id en paramètre
+        et retourne son réference
+        @param:
+        -id: id de la facture
+        @return: référence de la facture
+        """
+        record = self.env['account.move'].browse(id_fac)
+        if record:
+            return record.name
+        return ''
+
     @api.depends('partner_id')
     def _get_avoir_client(self):
         for record in self:

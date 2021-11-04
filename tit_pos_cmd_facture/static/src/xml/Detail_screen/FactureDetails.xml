@@ -25,12 +25,11 @@
                                    Enregistrer le paiement
                                 </button>
                             </div>
-
                     </div>
                 <div class="client-select" style="font-size: 24px; font-weight: bold;">
                     <div>
                         <span class="label">Référence  :</span>
-                        <input class="detail mntnt" name="montant_du" t-att-value="props.facture_selected.name || ''" readonly="1" style="font-size: 22px; "/>
+                        <input class="detail mntnt" id="ref_fact" name="montant_du" t-att-value="props.facture_selected.name || ''" readonly="1" style="font-size: 22px; "/>
                     </div>
                     <br/>
                     <div>
@@ -48,9 +47,9 @@
                         <input class="detail mntnt" name="montant_du" t-att-value="get_payment_state(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
                     </div>
                     <br/>
-                    <div>
+                   <div>
                         <span class="label">Statut  :</span>
-                        <input class="detail mntnt" name="montant_du" t-att-value="get_payment_statut(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
+                        <input class="detail mntnt" id="statut_fact" name="statut_facture" t-att-value="get_payment_statut(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
                     </div>
                     <br/>
                     <div>
@@ -75,7 +74,6 @@
                             </t>
                         </select>
                     </div>
-                    
             </div>
         </div></div>
         </t>

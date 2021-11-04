@@ -8,7 +8,6 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
     const { posbus } = require('point_of_sale.utils');
     var models = require('point_of_sale.models');
     var rpc = require('web.rpc');
-
     models.load_models({
     model:  'account.journal',
     domain: function (self) { return [['type', 'in', ['bank', 'cash','avoir_type']]]; },
@@ -17,7 +16,6 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
             self.journals_recuperes = journals_result;
             }
     });
-
     class FactureSavePaiement extends PosComponent {
         constructor() {
             super(...arguments);
@@ -25,12 +23,23 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
             this.changes = {};
             const journals_recuperes = this.props.journals_recuperes 
         } 
-
-
         captureChange(event) {
                 this.changes[event.target.name] = event.target.value;  
         }
-        
+        get_ref_client(facture_id){
+            /*
+            Cette fonction permet de récupérer la ref de la facture
+            @param:
+                -facture_id: de la facture à récupérer leur name
+            */
+            rpc.query({
+                model: 'account.move',
+                method: 'get_ref_facture',
+                args: [facture_id]
+            }).then(function (u) {
+                $("#ref_fact").val(u);
+            });
+        }
         get_name_client(factures_non_payees){
             /*
             Cette fonstion permet de récupérer le nom du client de la facture
@@ -39,7 +48,6 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
             */
             return factures_non_payees.partner_id[1]
         }
-
         get_avoir_client(factures_non_payees){
             /*
             Cette fonstion permet de récupérer l'avoir du client de la facture
@@ -49,7 +57,6 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
             return factures_non_payees.avoir_client.toFixed(2);
              
         }
-
         async enregistrer_paiement(facture_id) {
             /*
             Cette fonction permet d'enregistrer le paiement d'une facture depuis pos
@@ -91,7 +98,6 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
                         args: [processedChanges['montant_saisi'], [facture_id], processedChanges['facture_recuperes_id'], self.env.pos.pos_session.id],
                             }).then(function (u) {
                                 if (u == 1){
-                                    
                                     rpc.query({
                                         model: 'account.move',
                                         method: 'search_read',
@@ -125,8 +131,8 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
                                         body:('Vous avez que  '+u.toFixed(2)+ ' comme avoir')
                                     });
                                 }
-                    });
-                }
+                        });
+                    }
             } catch (error) {
                 throw error;
             }      
