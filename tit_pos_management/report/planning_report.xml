@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+          <report
+            id="planning_xlsx"
+            model="planning.preparation_wizard"
+            string="Print to XLSX"
+            report_type="xlsx"
+            name="tit_pos_management.planning_report"
+            file="Planning_report"
+            attachment_use="False"
+        /> 
+</data>
+</odoo>

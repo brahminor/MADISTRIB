@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_planning_preparation_wizard" model="ir.ui.view">
+            <field name="name">Planning de préparation</field>
+            <field name="model">planning.preparation_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Planning" version="1.0">
+                    <group>
+                        <group>
+                            <field name="date_debut"/>
+                        </group>
+                        <group>
+                             <field name="date_fin" />
+                        </group> 
+                        <group>
+                             <field name="planning" />
+                        </group> 
+                        <group>
+                            <field name="chauffeur" attrs="{'invisible': [('planning', '!=', 'p_t_chauffeur')]}"/>
+                            <field name="transporteur" attrs="{'invisible': [('planning', '!=', 'p_t_transporteur')]}"/>
+                            <field name="preparateur" attrs="{'invisible': [('planning', '!=', 'p_p_commande')]}"/>
+                        </group> 
+                    </group>
+                    <footer>
+                        <button string="Télecharger" name="print_report" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Annuler" class="oe_link" special="cancel" />
+                    </footer> 
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_planning_preparation_wizard" model="ir.actions.act_window">
+            <field name="name">Planning</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">planning.preparation_wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_planning_preparation_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Planning" id="id_MenuPrincipal_planning_preparation" parent= "stock.menu_stock_root" action="action_planning_preparation_wizard" groups="tit_pos_order.group_resp_logistique"/> 
+
+          
+    </data>
+</odoo>

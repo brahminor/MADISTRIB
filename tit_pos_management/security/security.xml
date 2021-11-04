@@ -4,11 +4,11 @@
      <record id="group_resp_site" model="res.groups">
         <field name="name">Résponsable site</field>  
     </record>
- 
 	<record model="mail.channel" id="channel_stock_purchase_group">
-		    <field name="name">Stock</field>
-		    <field name="group_ids" eval="[(4, ref('stock.group_stock_user')),(4, ref('purchase.group_purchase_user'))]"/>
-		    <field name="description">Message Notifications.</field>
-		</record>
-		</data>
+		    <field name="name" > Stock</field>
+		   <field name="group_ids" eval="[(4, ref('stock.group_stock_user')),(4, ref('purchase.group_purchase_user')),(4, ref('tit_pos_management.group_resp_site'))]"/>  
+		   <field name="group_public_id" ref="tit_pos_management.group_resp_site"/>  
+		   <field name="description">Message Notifications.</field>
+	</record>
+	</data>
 	</odoo>
