@@ -91,16 +91,28 @@ odoo.define('tit_pos_cmd_facture.FacturesNonPayee', function (require) {
             this.trigger('close-temp-screen'); 
         } 
         getDate(factures_non_payees) {
-            return moment(factures_non_payees.invoice_date).format('DD/MM/YYYY');
+            if (factures_non_payees.invoice_date){
+                return moment(factures_non_payees.invoice_date).format('DD/MM/YYYY');
+            }
+            else{
+                return '/';
+            }
+            
         }
         getDateEcheance(factures_non_payees){
-            return moment(factures_non_payees.invoice_date_due).format('DD/MM/YYYY');
+            if(factures_non_payees.invoice_date_due){
+                return moment(factures_non_payees.invoice_date_due).format('DD/MM/YYYY');
+            }
+            else{
+                return '/';
+            }
+            
         }
         get_payment_state(factures_non_payees){
             var etat_du_paiement = factures_non_payees.payment_state
             
             if (etat_du_paiement == 'not_paid')
-                return 'Non payées'
+                return 'Non payée'
             else if (etat_du_paiement == 'in_payment') 
                 return 'En paiement'
             else if (etat_du_paiement == 'partial')

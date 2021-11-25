@@ -23,8 +23,40 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
             this.changes = {};
             const journals_recuperes = this.props.journals_recuperes 
         } 
+        show_new_screeen(){
+            /*
+            cette fonction permet la redirection vers la page de saisie 
+            de cmd mais vide sans ajout d'une nvlle  cmd dans menu cmd du 
+            natif du pos
+            */
+            var v = this.env.pos.add_new_order();
+            this.env.pos.delete_current_order();
+            this.env.pos.set_order(v);  
+        }
         captureChange(event) {
                 this.changes[event.target.name] = event.target.value;  
+        }
+        get_montant_du(facture){
+            /*
+            Cette fonction permet de récupérer le montant du à payer
+            @param:
+                -facture_id: id de la facture à récupérer leur montant du
+            */
+            var self = this;
+            rpc.query({
+                model: 'account.move',
+                method: 'get_montant_du',
+                args: [facture.id]
+            }).then(function (u) {
+
+                self.props.avoir_type = u;
+                if (u =='out_refund'){
+                    $("#montant_saisi_a_regler").val(facture.amount_residual);
+                    
+                }else{
+                    $("#montant_saisi_a_regler").val(0);
+                }
+            });
         }
         get_ref_client(facture_id){
             /*
@@ -54,10 +86,41 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
             @param: 
                 -factures_non_payees: facture selectionnée en cours
             */
+
             return factures_non_payees.avoir_client.toFixed(2);
              
         }
-        async enregistrer_paiement(facture_id) {
+        get_amount_total(facture_id){
+            /*
+            Cette fonction permet de récupérer le montant total de la facture
+            @param:
+                -facture_id: de la facture à récupérer leur montant total
+            */
+            rpc.query({
+                model: 'account.move',
+                method: 'get_amount_totals',
+                args: [facture_id]
+            }).then(function (u) {
+                $("#montant_total").val(u);
+            });
+        }
+        get_amount_residual(facture_id){
+            /*
+            Cette fonction permet de récupérer le montant du de la facture
+            @param:
+                -facture_id: de la facture à récupérer leur le montant du
+            */
+            rpc.query({
+                model: 'account.move',
+                method: 'get_amount_residual',
+                args: [facture_id]
+            }).then(function (u) {
+                $("#amount_residual").val(u);
+                $("#montant_saisi_a_regler").val(u);
+
+            });
+        }
+        async enregistrer_paiement(facture_id, facture) {
             /*
             Cette fonction permet d'enregistrer le paiement d'une facture depuis pos
             @param:
@@ -69,9 +132,9 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
                 processedChanges['montant_saisi'] = 0
                 for (let [key, value] of Object.entries(this.changes)) {
                     processedChanges[key] = value;
-                    if (key == 'montant_saisi'){
+                    if (key == 'montant_saisi_a_regler'){
                         // récupération du montant saisi à payer
-                        processedChanges['montant_saisi'] = value
+                        processedChanges['montant_saisi_a_regler'] = value
                     }
                 }
                 //récupération du journal choisi
@@ -93,24 +156,77 @@ odoo.define('tit_pos_cmd_facture.FactureSavePaiement', function (require) {
                     var self = this;
                     //enregistrer le paiement de la facture
                      rpc.query({
-                        model: 'account.move', 
+                        model: 'account.move',
                         method: 'add_invoice_payment', 
-                        args: [processedChanges['montant_saisi'], [facture_id], processedChanges['facture_recuperes_id'], self.env.pos.pos_session.id],
+                        args: [$("#montant_saisi_a_regler").val(), [facture_id], processedChanges['facture_recuperes_id'], self.env.pos.pos_session.id],
                             }).then(function (u) {
                                 if (u == 1){
                                     rpc.query({
                                         model: 'account.move',
-                                        method: 'search_read',
-                                        args: [[['payment_state','in',['not_paid','partial']],['move_type','in',['out_invoice']],['state','!=','cancel']], []],
-                                    }).then(function (factures_non_payees){
-                                        self.env.pos.factures_non_payees = factures_non_payees;
-                                        self.showScreen('FacturesNonPayee');
-                                        
-                                        Gui.showPopup("ValidationCommandeSucces", {
-                                           title : self.env._t("Le paiemet est enregistré avec succès"),
-                                           confirmText: self.env._t("OK"),
-                                        });
-                                    });
+                                        method: 'get_montant_du',
+                                        args: [facture_id]
+                                    }).then(function (u) {
+                                        if (u =='out_refund'){
+                                            //ie c'est un avoir donc il faut faire le retour vers la liste des avoir client
+                                            rpc.query({
+                                                    model: 'account.move',
+                                                    method: 'search_read',
+                                                    args: [[['payment_state','in',['not_paid','partial']],['move_type','in',['out_refund']],['state','!=','cancel']], []],
+                                                }).then(function (factures_avoirs){
+                                                    self.env.pos.factures_avoirs = factures_avoirs;
+                                                    
+                                                    if($("#garder_argent").val() == 1){
+                                                        rpc.query({
+                                                            model: 'account.move',
+                                                            method: 'crediter_avoir_client',
+                                                            args: [facture_id, $("#montant_saisi_a_regler").val()]
+                                                        }).then(function (){
+                                                            self.showScreen('FacturesAvoir');
+                                                            Gui.showPopup("ValidationCommandeSucces", {
+                                                               title : self.env._t("Le paiemet est enregistré avec succès"),
+                                                               confirmText: self.env._t("OK"),
+                                                            });
+                                                        });
+                                                    }
+                                                    else{
+                                                        self.showScreen('FacturesAvoir');
+                                                        Gui.showPopup("ValidationCommandeSucces", {
+                                                           title : self.env._t("Le paiemet est enregistré avec succès"),
+                                                           confirmText: self.env._t("OK"),
+                                                        });
+                                                    }
+                                            });
+                                        }else{
+                                            //ie c'est une facture normale 
+                                            rpc.query({
+                                                model: 'account.move',
+                                                method: 'search_read',
+                                                args: [[['payment_state','in',['not_paid','partial']],['move_type','in',['out_invoice']],['state','!=','cancel']], []],
+                                            }).then(function (factures_non_payees){
+                                                self.env.pos.factures_non_payees = factures_non_payees;
+                                                if($("#garder_argent").val() == 1){
+                                                        rpc.query({
+                                                            model: 'account.move',
+                                                            method: 'crediter_avoir_client',
+                                                            args: [facture_id, $("#montant_saisi_a_regler").val()]
+                                                        }).then(function (factures_avoirs){
+                                                            self.showScreen('FacturesNonPayee');
+                                                            Gui.showPopup("ValidationCommandeSucces", {
+                                                               title : self.env._t("Le paiemet est enregistré avec succès"),
+                                                               confirmText: self.env._t("OK"),
+                                                            });
+                                                        });
+                                                    }
+                                                else{
+                                                    self.showScreen('FacturesNonPayee');
+                                                            Gui.showPopup("ValidationCommandeSucces", {
+                                                               title : self.env._t("Le paiemet est enregistré avec succès"),
+                                                               confirmText: self.env._t("OK"),
+                                                            });
+                                                }
+                                            });
+                                        }
+                                    }); 
                                 }
                                 else if (u == 0) {
                                     rpc.query({

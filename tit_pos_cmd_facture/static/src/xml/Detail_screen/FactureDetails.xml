@@ -33,18 +33,18 @@
                     </div>
                     <br/>
                     <div>
-                        <span class="label">date de facturation  :</span>
+                        <span class="label">Date de facturation  :</span>
                         <input class="detail mntnt" name="montant_du" t-att-value="getDate(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
                     </div>
                     <br/>
                     <div>
-                        <span class="label">date d'échéance  :</span>
+                        <span class="label">Date d'échéance  :</span>
                         <input class="detail mntnt" name="montant_du" t-att-value="getDateEcheance(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
                     </div>
                     <br/>
                     <div>
                         <span class="label">Etat du paiement  :</span>
-                        <input class="detail mntnt" name="montant_du" t-att-value="get_payment_state(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
+                        <input class="detail mntnt" id="etat_paiement" name="montant_du" t-att-value="get_payment_state(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
                     </div>
                     <br/>
                    <div>
@@ -53,13 +53,13 @@
                     </div>
                     <br/>
                     <div>
-                        <span class="label">Total à payer  :</span>
-                        <input class="detail mntnt" name="montant_total" t-att-value="props.facture_selected.amount_total || '0'" readonly="1" style="font-size: 22px; "/>
+                        <span class="label">Montant total facture :</span>
+                        <input class="detail mntnt" id="montant_total" name="montant_total" t-att-value="props.facture_selected.amount_total.toFixed(2) || '0'" readonly="1" style="font-size: 22px; "/>
                     </div>
                     <br/>
                     <div>
-                        <span class="label">Reste à payer  :</span>
-                        <input class="detail mntnt" name="montant_du" t-att-value="props.facture_selected.amount_residual || '0'" readonly="1" style="font-size: 22px; "/>
+                        <span class="label">Montant dû  :</span>
+                        <input class="detail mntnt" id="amount_residual" name="montant_du" t-att-value="props.facture_selected.amount_residual.toFixed(2) || '0'" readonly="1" style="font-size: 22px; "/>
                     </div>
                     <br/>
                     <div class="edit_client_a_selectionner" style="color: blue">

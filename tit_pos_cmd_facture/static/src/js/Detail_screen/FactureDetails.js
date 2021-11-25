@@ -49,16 +49,26 @@ odoo.define('tit_pos_cmd_facture.FactureDetails', function (require) {
                 this.changes[event.target.name] = event.target.value;  
         }
         getDate(factures_non_payees) {
-            return moment(factures_non_payees.invoice_date).format('DD/MM/YYYY');
+            if(factures_non_payees.invoice_date){
+                return moment(factures_non_payees.invoice_date).format('DD/MM/YYYY');
+            }
+            else{
+                return "/";
+            }
         }
         getDateEcheance(factures_non_payees){
-            return moment(factures_non_payees.invoice_date_due).format('DD/MM/YYYY');
+            if(factures_non_payees.invoice_date_due){
+                return moment(factures_non_payees.invoice_date_due).format('DD/MM/YYYY');
+            }
+            else{
+                return "/";
+            }
         }
         get_payment_state(factures_non_payees){
             var etat_du_paiement = factures_non_payees.payment_state
             
             if (etat_du_paiement == 'not_paid')
-                return 'Non payées'
+                return 'Non payée'
             else if (etat_du_paiement == 'in_payment') 
                 return 'En paiement'
             else if (etat_du_paiement == 'partial')
@@ -109,7 +119,10 @@ odoo.define('tit_pos_cmd_facture.FactureDetails', function (require) {
                             contents.find(".button_brouillon_fact_btn").addClass('oe_hidden');
                             contents.find(".button_confirm_fact_btn").removeClass('oe_hidden');
                             contents.find(".button_enreg_paiement_btn").addClass('oe_hidden');
+                            $('.edit_client_a_selectionner').attr("style", "pointer-events: all;");
                             $("#statut_fact").val("Brouillon");
+                            $("#etat_paiement").val("Non payée");
+                            $("#amount_residual").val($("#montant_total").val());
                             });
                         });
                     });

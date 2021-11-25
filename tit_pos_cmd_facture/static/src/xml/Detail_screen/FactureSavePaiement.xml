@@ -5,12 +5,12 @@
             <div class="screen-facture">
                 <div class="controls">
                     <div class="buttons_back">
-                        <button class="button back" t-on-click="showScreen('FacturesNonPayee')">
+                        <button class="button back" t-on-click="show_new_screeen()">
                             <span class="back_text">Fermer</span>
                         </button>  
                     </div> 
                             <div class="button_enreg_paiement_btn">
-                                <button class='button button_enreg_paiement' title="Enregistrer le paiement" style="right:100%; background-color: #32CD32;"  t-on-change="captureChange" t-on-click="enregistrer_paiement(  props.facture_selected.id)">
+                                <button class='button button_enreg_paiement' title="Enregistrer le paiement" style="right:100%; background-color: #32CD32;"  t-on-change="captureChange" t-on-click="enregistrer_paiement(  props.facture_selected.id, props.facture_selected)">
                                    Créer un paiement
                                 </button>
                             </div>
@@ -29,23 +29,23 @@
                     <br/>
                     <div class="edit_client_selected" style=" color:RED;">
                         <span class="label">Avoir du client  :</span>
-                        <input class="detail client_selectionne" name="client_recuperes_avoir" t-att-value="get_avoir_client(props.facture_selected)" readonly="1" style="font-size: 22px;  color:RED; "/>
+                        <input class="detail client_selectionne" id="avoir_client_a" name="client_recuperes_avoir" t-att-value="get_avoir_client(props.facture_selected)" readonly="1" style="font-size: 22px;  color:RED; "/>
                     </div>
                     <br/>
                     <div>
-                        <span class="label">Montant total  :</span>
-                        <input class="detail mntnt" name="montant_total" t-att-value="props.facture_selected.amount_total || '0'" readonly="1" style="font-size: 22px; "/>
+                        <span class="label">Montant total facture :</span>
+                        <input class="detail mntnt" id="montant_total" name="montant_total" t-att-value="get_amount_total(props.facture_selected.id)" readonly="1" style="font-size: 22px; "/>
                     </div>
                     
                     <br/>
                     <div>
                         <span class="label">Montant dû :</span>
-                        <input class="detail mntnt" name="montant_du" t-att-value="props.facture_selected.amount_residual || '0'" readonly="1" style="font-size: 22px; "/>
+                        <input class="detail mntnt" id="amount_residual" name="montant_du" t-att-value="get_amount_residual(props.facture_selected.id)" readonly="1" style="font-size: 22px; "/>
                     </div>
                     <br/>
                      <div>
-                        <span class="label">Montant à régler  :</span>
-                        <input class="detail mntnt" name="montant_saisi" t-att-value="'0'"  t-on-change="captureChange" style="font-size: 22px;    "/>
+                        <span class="label">Montant réglé  :</span>
+                        <input class="detail mntnt" id="montant_saisi_a_regler" t-att-value="get_amount_residual(props.facture_selected.id)"  name="montant_saisi_a_regler" t-on-change="captureChange" style="font-size: 22px;    "/>
                     </div>
                     <br/>
                     <div class="client-detail amount-input">
@@ -67,6 +67,16 @@
                             </select>
                     </div>
 
+                    <t t-if="props.facture_selected.move_type == 'out_refund'" >
+                    <br/>
+                    <div class="client-detail amount-input">
+                        <span class="label lb-journal-inv">Garder l'argent du client ?</span>
+                          <select class='detail needsclick journal-inv-payment' id="garder_argent" name='garder_argent' t-on-change="captureChange" style="font-size: 22px; ">
+                                <option value='0'>Non</option>
+                                <option value='1'>Oui</option>
+                            </select>
+                    </div>
+                </t>
                     
             </div>
         </div></div>

@@ -6,6 +6,32 @@ class account_move(models.Model):
     _inherit = "account.move"
 
     avoir_client = fields.Float("Avoir client", compute='_get_avoir_client')
+    @api.model
+    def get_montant_du(self, facture_id):
+        """
+        cette fonction permet de récupérer le montant du de la facture qui 
+        a l'id en paramètre.
+        @param:
+        -facture_id: l'id de la facture a retourner son montant du
+        """
+        record = self.env['account.move'].browse(facture_id)
+        if record:
+            return record.move_type
+        return ''
+
+    @api.model
+    def crediter_avoir_client(self, facture_id, montant):
+        """
+        Cette fonction permet de créditer l'avoir du client associé à la facture 
+        qui a l'id en paramètre avec le montant précisé
+        @param:
+        -facture_id: l'id de la facture à créditer l'avoir de leur client associé
+        -montant: le montant à ajouter à l'avoir du client
+        """
+        record = self.env['account.move'].browse(facture_id)
+        if record.partner_id:
+            record.partner_id.avoir_client += float(montant)
+        return True
 
     @api.model
     def get_ref_facture(self, id_fac):
@@ -13,13 +39,41 @@ class account_move(models.Model):
         Cette fonction permet de chercher la facture qui a l'id en paramètre
         et retourne son réference
         @param:
-        -id: id de la facture
+        -id_fac: id de la facture
         @return: référence de la facture
         """
         record = self.env['account.move'].browse(id_fac)
         if record:
             return record.name
         return ''
+
+    @api.model
+    def get_amount_totals(self, id_fac):
+        """
+        Cette fonction permet de chercher la facture qui a l'id en paramètre
+        et retourne son montant total
+        @param:
+        -id_fac: id de la facture
+        @return: référence de la facture
+        """
+        record = self.env['account.move'].browse(id_fac)
+        if record:
+            return record.amount_total
+        return 0
+
+    @api.model
+    def get_amount_residual(self, id_fac):
+        """
+        Cette fonction permet de chercher la facture qui a l'id en paramètre
+        et retourne son montant du
+        @param:
+        -id: id de la facture
+        @return: référence de la facture
+        """
+        record = self.env['account.move'].browse(id_fac)
+        if record:
+            return record.amount_residual
+        return 0
 
     @api.depends('partner_id')
     def _get_avoir_client(self):
@@ -67,28 +121,48 @@ class account_move(models.Model):
             #create bank statement
             journal = self.env['account.journal'].browse(journal_id)
             facture_selected = self.env['account.move'].browse(invoice_id)
-            if journal.type == 'avoir_type' and journal.avoir_journal == True and facture_selected:
-                #si le journal choisi est un avoir, débiter le montant depuis avoir du client
-                client_associe = self.env['res.partner'].browse(facture_selected.partner_id.id)
-                if client_associe:
-                    if amount > client_associe.avoir_client:
-                        return client_associe.avoir_client
-                    else:
-                        client_associe.avoir_client = client_associe.avoir_client - amount
+            if facture_selected.move_type != 'out_refund':
+                """ie le paiement est associé à une facture normale et non pas facture avoir client
+                donc il faut débiter l'avoir client"""
+                if journal.type == 'avoir_type' and journal.avoir_journal == True and facture_selected:
+                    #si le journal choisi est un avoir, débiter le montant depuis avoir du client
+                    if facture_selected.partner_id:
+                        if amount > facture_selected.partner_id.avoir_client:
+                            return facture_selected.partner_id.avoir_client
+                        else:
+                            facture_selected.partner_id.avoir_client = facture_selected.partner_id.avoir_client - amount
 
-            # use the company of the journal and not of the current user
-            company_cxt = dict(self.env.context, force_company=journal.company_id.id)
-            
-            payment_record = { 
-                'communication': "Paiement en caisse",
-                'journal_id': journal_id,
-                'amount': amount,
-            }
-            pay=self.env['account.payment.register'].with_context({'active_id': invoice_id,'active_ids': factures_a_payer,'active_model': 'account.move'}).create(payment_record)
-            
-            pay.action_create_payments()
-            return 1
+                # use the company of the journal and not of the current user
+                company_cxt = dict(self.env.context, force_company=journal.company_id.id)
+                
+                payment_record = { 
+                    'communication': "Paiement en caisse",
+                    'journal_id': journal_id,
+                    'amount': amount,
+                }
+                pay=self.env['account.payment.register'].with_context({'active_id': invoice_id, 'active_ids': factures_a_payer, 'active_model': 'account.move'}).create(payment_record)
+                
+                pay.action_create_payments()
+                return 1
+            else:
+                """
+                ie la facture à payer est un avoir client donc on ne va pas débiter 
+                depuis l'avoir client encore une fois
+                """
+                # use the company of the journal and not of the current user
+                company_cxt = dict(self.env.context, force_company=journal.company_id.id)
+                
+                payment_record = { 
+                    'communication': "Paiement en caisse",
+                    'journal_id': journal_id,
+                    'amount': amount,
+                }
+                pay=self.env['account.payment.register'].with_context({'active_id': invoice_id,'active_ids': factures_a_payer,'active_model': 'account.move'}).create(payment_record)
+                
+                pay.action_create_payments()
+                return 1
         return 0
+
 
     @api.model
     def get_amount_total(self, facture_ids):
