@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="FactureAvoirDetails" owl="1">
+        <div class="ticket-screen screen">
+            <div class="screen-facture">
+                <div class="controls">
+                    <div class="buttons_back">    
+                    </div>
+                    <div class="button_enreg_paiement_btn">
+                        <button class='button button_enreg_paiement' title="Enregistrer le paiement" style="right:100%; background-color: #32CD32;" t-on-change="captureChange" t-on-click="enregistrer_paiement(  props.facture_selected.id)">
+                               Enregistrer le paiement
+                        </button>
+                    </div>
+                    </div>
+                <div class="client-select" style="font-size: 24px; font-weight: bold;">
+                    <div>
+                        <span class="label">Référence  :</span>
+                        <input class="detail mntnt" id="ref_fact" name="montant_du" t-att-value="props.facture_selected.name || ''" readonly="1" style="font-size: 22px; "/>
+                    </div>
+                    <br/>
+                    <div>
+                        <span class="label">Date de facturation  :</span>
+                        <input class="detail mntnt" name="montant_du" t-att-value="getDate(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
+                    </div>
+                    <br/>
+                    <div>
+                        <span class="label">Date d'échéance  :</span>
+                        <input class="detail mntnt" name="montant_du" t-att-value="getDateEcheance(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
+                    </div>
+                    <br/>
+                    <div>
+                        <span class="label">Etat du paiement  :</span>
+                        <input class="detail mntnt" id="etat_paiement" name="montant_du" t-att-value="get_payment_state(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
+                    </div>
+                    <br/>
+                   <div>
+                        <span class="label">Statut  :</span>
+                        <input class="detail mntnt" id="statut_fact" name="statut_facture" t-att-value="get_payment_statut(props.facture_selected) || ''" readonly="1" style="font-size: 22px; "/>
+                    </div>
+                    <br/>
+                    <div>
+                        <span class="label">Montant total facture :</span>
+                        <input class="detail mntnt" id="montant_total" name="montant_total" t-att-value="props.facture_selected.amount_total || '0'" readonly="1" style="font-size: 22px; "/>
+                    </div>
+                    <br/>
+                    <div>
+                        <span class="label">Montant dû  :</span>
+                        <input class="detail mntnt" id="amount_residual" name="montant_du" t-att-value="props.facture_selected.amount_residual || '0'" readonly="1" style="font-size: 22px; "/>
+                    </div>
+                    <br/>
+                    <div class="edit_client_a_selectionner" style="color: blue">
+                        <span class="label">Client  :</span>
+                        <select class='detail needsclick' name='client_recuperes_id' t-on-change="captureChange" style="color: blue; font-size: 22px; ">
+                            <t t-foreach='env.pos.client_recuperes' t-as='client_recuperes' t-key="client_recuperes.id">
+                                <option t-att-value='client_recuperes.id'
+                                    t-att-selected="props.facture_selected.partner_id ? 
+                                    ((client_recuperes.id === props.facture_selected.partner_id[0]) ? true : undefined) : undefined">
+                                    <t t-esc='client_recuperes.name'/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+            </div>
+        </div>
+    </div>
+    </t>
+</templates>

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 class pos_order(models.Model):
 	_inherit = "pos.order"
@@ -34,13 +35,6 @@ class pos_order(models.Model):
 				cmd_principale = self.env['sale.order'].browse(pos_commande)
 				#create bank statement
 				journal = self.env['account.journal'].browse(journal_id)
-				if journal.type == 'avoir_type' and journal.avoir_journal == True and cmd_principale:
-					#si le journal choisi est un avoir, débiter le montant depuis avoir du client
-					if amount > cmd_principale.partner_id.avoir_client:
-						return cmd_principale.partner_id.avoir_client
-					else:
-						cmd_principale.partner_id.avoir_client = cmd_principale.partner_id.avoir_client - amount
-				
 				so = []
 				invoice_generated = 0
 				for i in cmd_principale:
@@ -74,6 +68,8 @@ class pos_order(models.Model):
 		tableau des produits du devis par le produit acompte associé 
 		et permet de mettre de rendre le champ trait_tot du sale order en True
 		dans le cas du transfert de  la totalité du sale order vers le pos
+		et pertmette par la suite de débiter avoir client dans le cas d'une vente
+		avec avoir
 		@param:
 		- pos_commande: id du devis (sale order) principal
 		- num_recu: référence  de la commande générée (pos order)
@@ -104,3 +100,69 @@ class pos_order(models.Model):
 					bl_record.action_confirm()
 					bl_record.action_assign()
 					pos_order.write({'bon_livraison': bl_record.id})
+
+		#voir si meth de paiement est avoir donc débiter depuis avoir du client
+		list_payment = []
+		for j in pos_order.payment_ids:
+			#récupérer dans une liste les methodes de paiements utilisés dans la commande
+			if j.payment_method_id.id not in list_payment:
+				list_payment.append(j.payment_method_id.id)
+		for k in list_payment:
+			payment_recrod = self.env['pos.payment'].search([('pos_order_id', '=', pos_order.id),('payment_method_id', '=', k)])
+			montant_a_payer = 0
+			for l in payment_recrod:
+				montant_a_payer += l.amount
+			if payment_recrod.payment_method_id.cash_journal_id:
+				if payment_recrod.payment_method_id.cash_journal_id.type == 'avoir_type' and payment_recrod.payment_method_id.cash_journal_id.avoir_journal == True and montant_a_payer > 0:
+					pos_order.partner_id.avoir_client -= float(montant_a_payer)
+
+	@api.model
+	def validate_facture(self, pos_commande, num_recu):
+		"""cette fontion  permette d'enregistrer le paiement de la facture associée
+		au pos order automatiquement après la validation du paiement depuis le pos
+		@param:
+		- pos_commande: id du devis (sale order) principal
+		- num_recu: référence  de la commande générée (pos order)
+		"""
+		
+		pos_order = self.env['pos.order'].search([('pos_reference', '=', num_recu)])
+		if pos_order.account_move:
+			"""
+			ie cette commande admet une facture générée:
+			Enregistrer le paiement de la facture liée au pos order automatiquement après la validation 
+			du paiement de la commande sur le pos
+			"""
+			list_payment = []
+			for j in pos_order.payment_ids:
+				#récupérer dans une liste les methodes de paiements utilisés dans la commande
+				if j.payment_method_id.id not in list_payment:
+					list_payment.append(j.payment_method_id.id)
+
+			for k in list_payment:
+				"""pour chaque methode de paiement on fait la somme des montants et enregistrer le paiement
+				de la facture du pos order avec le montant résultant et le journal associé à 
+				la methode de paiement courante"""
+				payment_recrod = self.env['pos.payment'].search([('pos_order_id', '=', pos_order.id),('payment_method_id', '=', k)])
+				montant_a_payer = 0
+				"""faire la somme des montants pour chaque ligne de paiement afin
+				d'enregistrer le paiement de la facture avec le journal associé"""
+				for l in payment_recrod:
+					montant_a_payer += l.amount
+				if payment_recrod:
+					if not payment_recrod[0].payment_method_id.cash_journal_id:
+						raise UserError(_("Facture non payée !\n Veuillez remplir le journal associé à chaque méthode de paiement utilisée s.v.p"))
+					else:
+						if pos_order.account_move.move_type == 'out_refund':
+							payment_partial = {
+							'communication': pos_order.pos_reference,
+							'journal_id': payment_recrod[0].payment_method_id.cash_journal_id.id,
+							'amount': montant_a_payer * (-1),
+							}
+						else:
+							payment_partial = {
+							'communication': pos_order.pos_reference,
+							'journal_id': payment_recrod[0].payment_method_id.cash_journal_id.id,
+							'amount': montant_a_payer,
+							}
+						pay=self.env['account.payment.register'].with_context({'active_id': pos_order.account_move.id,'active_ids': [pos_order.account_move.id],'active_model': 'account.move'}).create(payment_partial)
+						pay.action_create_payments()

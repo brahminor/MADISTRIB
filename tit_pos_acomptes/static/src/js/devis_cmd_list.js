@@ -24,7 +24,7 @@ odoo.define('tit_pos_acomptes.devis_cmd_list', function(require) {
             rpc.query({
                 model: 'sale.order',
                 method: 'search_read',
-                args: [[['state', 'in', ['sent', 'sale']], ['trait_tot', '=', false]], []],
+                args: [[['state', 'in', ['sale']], ['trait_tot', '=', false]], []],
             }).then(function (sales_orders){
                 self.env.pos.sale_orders = sales_orders;
                 self.showScreen('SaleOrderManagementScreen');

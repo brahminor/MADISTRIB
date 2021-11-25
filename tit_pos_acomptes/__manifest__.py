@@ -7,7 +7,7 @@
     "website": "https://www.sogesi-dz.com",
     "sequence": 0,
     "depends": [
-            "point_of_sale", "tit_pos_order", "ks_pos_low_stock_alert", "sale"
+            "point_of_sale", "tit_pos_order", "ks_pos_low_stock_alert", "sale", "tit_pos_cmd_facture"
     ],
     "category": "Point of Sale",
     'license': 'LGPL-3',

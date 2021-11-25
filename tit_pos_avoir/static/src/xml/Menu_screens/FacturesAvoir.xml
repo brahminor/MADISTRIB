@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="FacturesAvoir" owl="1">
+        <div class="ticket-screen screen">
+            <div class="screen-content">
+                <div class="controls">
+                    <div class="buttons">
+                        <button class="button back" t-on-click="show_new_screeen()">
+                            <span class="back_text">Fermer</span>
+                        </button>
+                    </div>
+                    <t t-set="placeholder">Recherche Facture ...</t>
+                    <SearchBar config="searchBarConfig" placeholder="placeholder" />
+                </div>
+                <div class="orders">
+                     <div class="orders">
+                    <div class="header-row">
+                        <div class="col start wide">#</div>
+                        <div class="col start wide">Numéro</div>
+                        <div class="col start wide">Client</div>
+                        <div class="col start wide">Date de facturation</div>
+                        <div class="col start wide">Date d'échéance</div>
+                        <div class="col start wide">Statut</div> 
+                        <div class="col start wide">Etat du paiement</div> 
+                        <div class="col start wide">Total à payer</div> 
+                        <div class="col start wide">Reste à payer</div>
+                    </div>
+                    <t t-foreach="factures_avoirsFiltre" t-as="cmd" t-key="cmd.cid" >
+                        <div class="order-row pointer" t-on-click="selectFacture_for_details(cmd, cmd.id)">
+                            <div class="col start wide">
+                                <input type="checkbox" id="cmd.id" name="selected_or_not_radio" t-att-value="cmd.id" class="client-type-radio" t-on-change="genre()"/>
+                            </div>
+                            <div class="col start wide">
+                                <t t-esc="cmd.name"/> 
+                            </div>
+                            <div class="col start wide">
+                                 <t t-esc="cmd.partner_id[1]"/>
+                            </div>
+                            <div class="col start wide">
+                                <t t-esc="getDate(cmd)"/> 
+                            </div>
+                            <div class="col start wide">
+                                <t t-esc="getDateEcheance(cmd)"/> 
+                            </div>
+                            <div class="col start wide">
+                                 <t t-esc="get_payment_statut(cmd)"/>
+                            </div>
+                            <!-- colorer la colonne selon état du paiement de la facture -->
+                            <t t-if="get_payment_state_chifre(cmd) == 'not_paid'">
+                                <div class="col start wide"  style="font-weight:bold; color: #F08080">
+                                    <t t-esc="get_payment_state(cmd)"/>
+                                </div>
+                            </t>
+                            <t t-elif="get_payment_state_chifre(cmd) == 'in_payment'">
+                                <div class="col start wide"  style="font-weight:bold; color: #FF8C00">
+                                    <t t-esc="get_payment_state(cmd)"/>
+                                </div>
+                            </t>
+                            <t t-elif="get_payment_state_chifre(cmd) == 'partial'">
+                                <div class="col start wide" style="font-weight:bold; color: #FF8C00">
+                                    <t t-esc="get_payment_state(cmd)"/>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="col start wide" style="font-weight:bold; color: #9ACD32">
+                                    <t t-esc="get_payment_state(cmd)"/>
+                                </div>
+                            </t>
+                            <!-- fin de  colorer la colonne selon état du paiement de la facture -->
+                            <div class="col start wide">
+                                 <t t-esc="cmd.amount_total.toFixed(2)"/>
+                            </div>
+                            <div class="col start wide">
+                                 <t t-esc="cmd.amount_residual.toFixed(2)"/>
+                            </div> 
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+</templates>

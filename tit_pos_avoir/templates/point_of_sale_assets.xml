@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets" inherit_id="point_of_sale.assets">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/tit_pos_avoir/static/src/js/facture_button.js"></script>
+            <script type="text/javascript" src="/tit_pos_avoir/static/src/js/facturesAvoir_button.js"></script>
+            <script type="text/javascript" src="/tit_pos_avoir/static/src/js/Detail_screen/FactureSavePaiement_factPaye.js"></script>
+            <script type="text/javascript" src="/tit_pos_avoir/static/src/js/Detail_screen/FactureDetails_factPaye.js"></script>
+            <script type="text/javascript" src="/tit_pos_avoir/static/src/js/Menu_screens/FacturesPayee.js"></script>
+            <script type="text/javascript" src="/tit_pos_avoir/static/src/js/Menu_screens/FacturesAvoir.js"></script>
+            <script type="text/javascript" src="/tit_pos_avoir/static/src/js/ks_product_screen.js"/>
+        </xpath>
+    </template>
+</odoo>

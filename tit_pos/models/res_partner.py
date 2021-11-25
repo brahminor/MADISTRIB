@@ -88,6 +88,23 @@ class res_partner(models.Model):
             #c'est à dire le client n'atteind plus la limite
             return 0
     @api.model
+    def montant_avoir_ou_pas(self, client_choisi, payment_lignes):
+        """
+        Cette fonction permet de vérifier si la methode de paiement dans la cmd
+        normale ou acompte est la meth avoir donc débiter depuis avoir client
+        """
+        montant_avoir_positif = 0
+        for i in payment_lignes:
+            payment_recrod = self.env['pos.payment.method'].browse(i.get('id_meth'))
+            if payment_recrod.cash_journal_id.type == 'avoir_type' and payment_recrod.cash_journal_id.avoir_journal == True and i.get('montant') > 0:
+                montant_avoir_positif += (i.get('montant'))
+
+        if montant_avoir_positif != 0:
+            # ie il existe des lignes de paiements tel que la méthode de paiement est avoir
+            client_associe = self.env['res.partner'].browse(client_choisi)
+            client_associe[0].avoir_client -= montant_avoir_positif
+
+    @api.model
     def avoir_depasse_ou_pas(self, client_choisi, payment_lignes):
         """
         Cette fonction permet de vérifier si le montant à payer par avoir 
@@ -103,9 +120,9 @@ class res_partner(models.Model):
         
         montant_avoir_positif = 0
         for i in payment_lignes:
-            meth_pay = self.env['pos.payment.method'].browse(i.get('id_meth'))
-            if meth_pay and meth_pay[0].methode_avoir and i.get('montant') > 0:
-                    montant_avoir_positif += (i.get('montant'))
+            payment_recrod = self.env['pos.payment.method'].browse(i.get('id_meth'))
+            if payment_recrod.cash_journal_id.type == 'avoir_type' and payment_recrod.cash_journal_id.avoir_journal == True and i.get('montant') > 0:
+                montant_avoir_positif += (i.get('montant'))
 
         if montant_avoir_positif != 0:
             # ie il existe des lignes de paiements tel que la méthode de paiement est avoir
