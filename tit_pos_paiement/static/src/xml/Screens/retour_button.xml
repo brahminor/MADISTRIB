@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
     <t t-name="retour_button" owl="1">
-       <span class="control-button ctrl_btnRetour" style="font-weight:bold; background-color: #FF8C00">
-           <i class='fa fa-rotate-left' /> 
-           <span>Retour</span>
+       <span class="control-button ctrl_btnRetour" style="font-weight:bold; background-color: #00BFFF">
+           <i class='fa fa-ticket' /> 
+           <span>Remise (Montant fixe)</span>
        </span>
    </t>
 </templates>

@@ -64,13 +64,78 @@ odoo.define('tit_pos_order.PaymentScreenButton', function(require) {
             de cmd mais vide sans ajout d'une nvlle  cmd dans menu cmd du 
             natif du pos
             */
+            this.debiter_avoir_client();
             var v = this.env.pos.add_new_order();
             this.env.pos.delete_current_order();
             this.env.pos.set_order(v);  
         } 
+        debiter_avoir_client(){
+            /*cette fonstion fait l'appel à la fonction du python afin de vérifier 
+            si la méthode de paiement utilisée est avoir donc faire le débitage depuis
+             l'avoir  client*/
+
+             var ligne_payements = this.env.pos.get_order().get_paymentlines()
+            var payment_lignes = []
+                    /* 
+                        voir si le montant est positif ou négative psq dans le cas de 
+                        negative donc c un retour et ne va pas afficher le msg bloquant (psq le client entrain de faire un retour)
+                    */
+                    var montant_totale_trouve = 0
+                    var ligne_payements_effectuees = this.env.pos.get_order().get_paymentlines()
+                    for(var i =0; i<ligne_payements_effectuees.length;i++){
+                        montant_totale_trouve += ligne_payements_effectuees[i].amount
+ 
+                        payment_lignes.push({
+                            'id_meth': ligne_payements_effectuees[i].payment_method.id,
+                            'montant': ligne_payements_effectuees[i].amount
+                        })
+                    }
+                    var self2 = this
+                    var avoir_atteind =0;
+                    rpc.query({
+                        model: 'res.partner',
+                        method: 'montant_avoir_ou_pas',
+                        args: [this.env.pos.get_order().get_client().id, payment_lignes]
+                    }).then(function(result_fct){
+                        
+                    });
+        }
         async validateOrder(isForceValidate) {
-            // cette fonction permet de faire l'appel à la fonction qui fait la validation de la commande sur le pos
-            this.validate_order_p(isForceValidate)
+            var ligne_payements = this.env.pos.get_order().get_paymentlines()
+            var payment_lignes = []
+                    /* 
+                        voir si le montant est positif ou négative psq dans le cas de 
+                        negative donc c un retour et ne va pas afficher le msg bloquant (psq le client entrain de faire un retour)
+                    */
+                    var montant_totale_trouve = 0
+                    var ligne_payements_effectuees = this.env.pos.get_order().get_paymentlines()
+                    for(var i =0; i<ligne_payements_effectuees.length;i++){
+                        montant_totale_trouve += ligne_payements_effectuees[i].amount
+ 
+                        payment_lignes.push({
+                            'id_meth': ligne_payements_effectuees[i].payment_method.id,
+                            'montant': ligne_payements_effectuees[i].amount
+                        })
+                    }
+                    var self2 = this
+                    var avoir_atteind =0;
+                    rpc.query({
+                        model: 'res.partner',
+                        method: 'avoir_depasse_ou_pas',
+                        args: [this.env.pos.get_order().get_client().id, payment_lignes]
+                    }).then(function(result_fct){
+                        if (result_fct > 0){
+                            avoir_atteind = 1;
+                            self2.showPopup('ErrorPopup', {
+                                title:('L\'avoir est insuffisant'),
+                                body:('Vous avez que  '+result_fct.toFixed(2)+ ' comme avoir')
+                            });
+                        }
+                        else{
+                            avoir_atteind = 0;
+                            self2.validate_order_p(isForceValidate)
+                        }
+                    });
         }
         async validate_order_p(isForceValidate){
             //cette fonction permet de valider la commande sur le pos 
@@ -183,7 +248,7 @@ odoo.define('tit_pos_order.PaymentScreenButton', function(require) {
                                     method: 'creer_facture',
                                     args: [commande_ancienne, self.env.pos.get_order().name, order.selected_option, down_payment_saisi, order.paymentlines.models[0].payment_method.id, order.paymentlines.models[0].amount]
                                 }).then(function(u){
-                                    //this.show_new_screeen();
+                                    
                                     if (u < 0){
                                         if (u == (-1)){
                                             self.showPopup('ErrorPopup', {
@@ -268,8 +333,14 @@ odoo.define('tit_pos_order.PaymentScreenButton', function(require) {
                                 model: 'pos.order',
                                 method: 'fill_commande_principale',
                                 args: [commande_ancienne, self.env.pos.get_order().name]
-                            }).then(function(u){   
+                            }).then(function(u){  
                                 rpc.query({
+                                    model: 'pos.order',
+                                    method: 'validate_facture',
+                                    args: [commande_ancienne, self.env.pos.get_order().name]
+                                }).then(function(y){ 
+
+                                    rpc.query({
                                         model: 'account.move',
                                         method: 'search_read',
                                         args: [[['payment_state','in',['not_paid','partial']],['move_type','in',['out_invoice']],['state','!=','cancel']], []],
@@ -286,7 +357,7 @@ odoo.define('tit_pos_order.PaymentScreenButton', function(require) {
                                             self.env.pos.delete_current_order();
                                             self.reload_cmd_vendeur(commande_ancienne);
                                         });
-                                    });
+                                    });});
                                 });
                             }
                         }
@@ -397,6 +468,11 @@ odoo.define('tit_pos_order.PaymentScreenButton', function(require) {
                                 args: [commande_ancienne, self.env.pos.get_order().name]
                             }).then(function(u){
                                 rpc.query({
+                                    model: 'pos.order',
+                                    method: 'validate_facture',
+                                    args: [commande_ancienne, self.env.pos.get_order().name]
+                                }).then(function(y){ 
+                                rpc.query({
                                         model: 'account.move',
                                         method: 'search_read',
                                         args: [[['payment_state','in',['not_paid','partial']],['move_type','in',['out_invoice']],['state','!=','cancel']], []],
@@ -413,6 +489,7 @@ odoo.define('tit_pos_order.PaymentScreenButton', function(require) {
                                             self.reload_cmd_vendeur(commande_ancienne);
                                         });
                                         });
+                                });
                             });
                             }
                             this.reload_cmd_vendeur(commande_ancienne);

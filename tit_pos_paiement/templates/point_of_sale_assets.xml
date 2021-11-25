@@ -7,7 +7,7 @@
             <script type="text/javascript" src="/tit_pos_paiement/static/src/js/ChequeDifPopup.js"></script> 
             <script type="text/javascript" src="/tit_pos_paiement/static/src/js/ChequeNormPopup.js"></script> 
             <script type="text/javascript" src="/tit_pos_paiement/static/src/js/ChequeKdoPopup.js"></script> 
-            
+            <script type="text/javascript" src="/tit_pos_paiement/static/src/js/retour_button.js"></script>
         </xpath>
     </template>
 </odoo>
